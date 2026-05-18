@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ML with Scikit-Learn — Interactive Learning Lab</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;1,9..40,300&display=swap');
+
+:root {
+  --bg: #04060f;
+  --surface: #080d1a;
+  --surface2: #0d1526;
+  --border: #1a2540;
+  --accent1: #00e5ff;
+  --accent2: #7c3aff;
+  --accent3: #ff6b35;
+  --accent4: #00ff88;
+  --accent5: #ffd600;
+  --text: #e8edf5;
+  --muted: #5a6a8a;
+  --glow1: rgba(0,229,255,0.15);
+  --glow2: rgba(124,58,255,0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--accent1);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s, opacity 0.3s;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--accent1);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.25s ease, opacity 0.3s;
+  opacity: 0.5;
+}
+
+/* NOISE OVERLAY */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* STARFIELD */
+#stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(0,229,255,0.08);
+  border: 1px solid rgba(0,229,255,0.2);
+  border-radius: 100px;
+  padding: 0.4rem 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent1);
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+  animation: fadeSlideDown 0.8s ease both;
+}
+.hero-badge .dot { width: 6px; height: 6px; background: var(--accent4); border-radius: 50%; animation: pulse 2s infinite; }
+
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+@keyframes fadeSlideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeSlideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes glowPulse { 0%,100%{filter:drop-shadow(0 0 20px var(--accent1))} 50%{filter:drop-shadow(0 0 50px var(--accent1))} }
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  animation: fadeSlideUp 0.9s 0.2s ease both;
+}
+
+.hero h1 .line1 { display: block; color: var(--text); }
+.hero h1 .line2 {
+  display: block;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 1.1rem; font-weight: 300; color: var(--muted);
+  max-width: 560px; line-height: 1.7;
+  animation: fadeSlideUp 0.9s 0.4s ease both;
+  margin-bottom: 3rem;
+}
+
+.hero-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem; width: 100%; max-width: 700px;
+  animation: fadeSlideUp 0.9s 0.6s ease both;
+}
+
+.project-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--text);
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+}
+.project-pill:hover {
+  transform: translateY(-4px);
+  border-color: var(--pill-color, var(--accent1));
+  box-shadow: 0 8px 30px var(--glow1);
+  background: var(--surface2);
+}
+.project-pill .pill-icon { font-size: 1.5rem; }
+.project-pill .pill-label { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-align: center; line-height: 1.4; }
+.project-pill .pill-num { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; }
+
+/* SECTION LAYOUT */
+.section {
+  position: relative; z-index: 2;
+  max-width: 1100px; margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.section-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+}
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* PROJECT CARDS */
+.project-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 4rem;
+  transition: border-color 0.3s;
+}
+.project-block:hover { border-color: var(--proj-color); }
+
+.project-head {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 380px;
+}
+
+.project-info {
+  padding: 3rem;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--border);
+}
+
+.proj-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.15em;
+  color: var(--proj-color, var(--accent1));
+  margin-bottom: 1rem;
+}
+.proj-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem; font-weight: 800;
+  letter-spacing: -0.02em; line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.proj-desc {
+  color: var(--muted); font-size: 0.9rem;
+  line-height: 1.7; flex: 1;
+  margin-bottom: 1.5rem;
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.08em;
+  padding: 0.3rem 0.7rem;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.proj-launch {
+  margin-top: 1.5rem;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--proj-color, var(--accent1));
+  color: var(--bg);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
+  border-radius: 100px;
+  cursor: pointer; border: none;
+  transition: all 0.2s ease;
+  text-align: left;
+  align-self: flex-start;
+}
+.proj-launch:hover { transform: scale(1.04); filter: brightness(1.1); }
+.proj-launch .arrow { transition: transform 0.2s; }
+.proj-launch:hover .arrow { transform: translateX(4px); }
+
+/* VIZ PANELS */
+.viz-panel {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 380px;
+  background: var(--surface2);
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(4,6,15,0.95);
+  backdrop-filter: blur(20px);
+  z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+
+.modal {
+  width: min(95vw, 1000px);
+  max-height: 90vh;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  overflow-y: auto;
+  transform: scale(0.95) translateY(20px);
+  transition: transform 0.3s;
+}
+.modal-overlay.active .modal { transform: scale(1) translateY(0); }
+
+.modal-header {
+  position: sticky; top: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 10;
+}
+.modal-close {
+  width: 36px; height: 36px;
+  border-radius: 50%; border: 1px solid var(--border);
+  background: transparent; color: var(--muted);
+  cursor: pointer; font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.modal-close:hover { border-color: var(--text); color: var(--text); transform: rotate(90deg); }
+
+.modal-body { padding: 2rem; }
+
+/* CODE BLOCK */
+.code-block {
+  background: #020408;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+}
+.code-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.code-dots { display: flex; gap: 0.4rem; }
+.code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.code-dots .d1 { background: #ff5f57; }
+.code-dots .d2 { background: #febc2e; }
+.code-dots .d3 { background: #28c840; }
+.code-filename { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+.copy-btn {
+  font-family: 'Space Mono', monospace; font-size: 0.6rem;
+  color: var(--muted); background: transparent; border: 1px solid var(--border);
+  padding: 0.25rem 0.6rem; border-radius: 6px; cursor: pointer;
+  transition: all 0.2s;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--text); }
+
+pre {
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: #abb2bf;
+}
+
+.kw { color: #c678dd; }
+.fn { color: #61afef; }
+.str { color: #98c379; }
+.num { color: #d19a66; }
+.cm { color: #5c6370; font-style: italic; }
+.cls { color: #e5c07b; }
+.imp { color: #e06c75; }
+
+/* STEP CARDS */
+.steps { display: flex; flex-direction: column; gap: 1rem; margin: 1.5rem 0; }
+.step {
+  display: flex; gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  border-left: 3px solid var(--proj-color, var(--accent1));
+}
+.step-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem; font-weight: 700;
+  color: var(--proj-color, var(--accent1));
+  min-width: 2rem;
+  padding-top: 0.1rem;
+}
+.step-text { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+.step-text strong { color: var(--text); }
+
+/* CONCEPT CARDS */
+.concepts { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.concept-card {
+  padding: 1.25rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: all 0.2s;
+}
+.concept-card:hover { border-color: var(--proj-color, var(--accent1)); transform: translateY(-2px); }
+.concept-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.concept-title { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem; }
+.concept-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+
+/* INTERACTIVE DEMOS */
+.demo-container {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+.demo-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+.demo-controls { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+.demo-slider { display: flex; flex-direction: column; gap: 0.3rem; }
+.demo-slider label { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+input[type=range] { width: 180px; accent-color: var(--accent1); cursor: pointer; }
+.demo-btn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px; border: 1px solid var(--border);
+  background: transparent; color: var(--text);
+  font-family: 'Space Mono', monospace; font-size: 0.65rem;
+  cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.demo-btn:hover { border-color: var(--accent1); color: var(--accent1); }
+.demo-btn.primary { background: var(--accent1); color: var(--bg); border-color: var(--accent1); }
+.demo-btn.primary:hover { filter: brightness(1.1); }
+
+canvas { display: block; border-radius: 10px; background: #020408; }
+
+/* FORMULA */
+.formula {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent5);
+  padding: 1rem 1.25rem;
+  border-radius: 0 12px 12px 0;
+  color: var(--accent5);
+  margin: 1rem 0;
+}
+
+h2 { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; margin: 1.5rem 0 0.75rem; }
+h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 600; margin: 1rem 0 0.5rem; color: var(--muted); }
+p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; margin-bottom: 0.75rem; }
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: absolute; bottom: 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  animation: fadeSlideUp 1s 1s ease both;
+}
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--muted), transparent); animation: scrollLine 2s ease-in-out infinite; }
+@keyframes scrollLine { 0%,100%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} }
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+}
+
+/* ANIMATED BG MESH */
+.mesh {
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(0,229,255,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(124,58,255,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 50% 50%, rgba(0,255,136,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<canvas id="stars"></canvas>
+<div class="mesh"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Interactive Learning Lab · Scikit-Learn · Machine Learning
+  </div>
+  <h1>
+    <span class="line1">Machine Learning</span>
+    <span class="line2">Visual Lab</span>
+  </h1>
+  <p class="hero-sub">Five deeply interactive, visually animated projects that teach you scikit-learn from the ground up — with live demos, beautiful code walkthroughs, and real-time simulations.</p>
+  <div class="hero-grid">
+    <a href="#proj1" class="project-pill" style="--pill-color:#00e5ff">
+      <span class="pill-icon">📈</span>
+      <span class="pill-num" style="color:#00e5ff">01</span>
+      <span class="pill-label">Linear Regression</span>
+    </a>
+    <a href="#proj2" class="project-pill" style="--pill-color:#7c3aff">
+      <span class="pill-icon">🌿</span>
+      <span class="pill-num" style="color:#7c3aff">02</span>
+      <span class="pill-label">Decision Tree</span>
+    </a>
+    <a href="#proj3" class="project-pill" style="--pill-color:#ff6b35">
+      <span class="pill-icon">🔵</span>
+      <span class="pill-num" style="color:#ff6b35">03</span>
+      <span class="pill-label">K-Means Cluster</span>
+    </a>
+    <a href="#proj4" class="project-pill" style="--pill-color:#00ff88">
+      <span class="pill-icon">🛡️</span>
+      <span class="pill-num" style="color:#00ff88">04</span>
+      <span class="pill-label">SVM Classifier</span>
+    </a>
+    <a href="#proj5" class="project-pill" style="--pill-color:#ffd600">
+      <span class="pill-icon">🌲</span>
+      <span class="pill-num" style="color:#ffd600">05</span>
+      <span class="pill-label">Random Forest</span>
+    </a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    scroll to explore
+  </div>
+</section>
+
+<!-- ==================== PROJECT 1 ==================== -->
+<section class="section" id="proj1">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 01 — Supervised Learning</div>
+      <div class="section-title" style="color:var(--accent1)">Linear Regression</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.linear_model</span>
+  </div>
+
+  <div class="project-block" style="--proj-color:var(--accent1)">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num">PROJECT // 01</div>
+          <div class="proj-title">Predicting House Prices with Linear Regression</div>
+          <div class="proj-desc">Learn how linear regression draws the best-fit line through data by minimizing the sum of squared errors. We'll build a house price predictor and animate how the model learns.</div>
+          <div class="tags">
+            <span class="tag">LinearRegression</span>
+            <span class="tag">train_test_split</span>
+            <span class="tag">MSE / R²</span>
+            <span class="tag">StandardScaler</span>
+          </div>
+        </div>
+        <button class="proj-launch" onclick="openModal('m1')">
+          Open Full Lesson <span class="arrow">→</span>
+        </button>
+      </div>
+      <div class="viz-panel" id="viz1">
+        <canvas id="c1" width="440" height="380"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECT 2 ==================== -->
+<section class="section" id="proj2">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 02 — Supervised Learning</div>
+      <div class="section-title" style="color:var(--accent2)">Decision Tree Classifier</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.tree</span>
+  </div>
+
+  <div class="project-block" style="--proj-color:var(--accent2)">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:var(--accent2)">PROJECT // 02</div>
+          <div class="proj-title">Iris Flower Classification with Decision Trees</div>
+          <div class="proj-desc">Visualize how a decision tree splits data using information gain and Gini impurity. Watch the tree grow in real time and understand every decision boundary.</div>
+          <div class="tags">
+            <span class="tag">DecisionTreeClassifier</span>
+            <span class="tag">Gini Impurity</span>
+            <span class="tag">Information Gain</span>
+            <span class="tag">max_depth</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:var(--accent2)" onclick="openModal('m2')">
+          Open Full Lesson <span class="arrow">→</span>
+        </button>
+      </div>
+      <div class="viz-panel" id="viz2">
+        <canvas id="c2" width="440" height="380"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECT 3 ==================== -->
+<section class="section" id="proj3">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 03 — Unsupervised Learning</div>
+      <div class="section-title" style="color:var(--accent3)">K-Means Clustering</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.cluster</span>
+  </div>
+
+  <div class="project-block" style="--proj-color:var(--accent3)">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:var(--accent3)">PROJECT // 03</div>
+          <div class="proj-title">Customer Segmentation with K-Means</div>
+          <div class="proj-desc">Watch centroids drift across the canvas as K-Means iterates toward convergence. Learn the EM algorithm and discover how to choose K with the Elbow Method.</div>
+          <div class="tags">
+            <span class="tag">KMeans</span>
+            <span class="tag">Centroids</span>
+            <span class="tag">Elbow Method</span>
+            <span class="tag">Inertia</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:var(--accent3)" onclick="openModal('m3')">
+          Open Full Lesson <span class="arrow">→</span>
+        </button>
+      </div>
+      <div class="viz-panel" id="viz3">
+        <canvas id="c3" width="440" height="380"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECT 4 ==================== -->
+<section class="section" id="proj4">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 04 — Supervised Learning</div>
+      <div class="section-title" style="color:var(--accent4)">Support Vector Machine</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.svm</span>
+  </div>
+
+  <div class="project-block" style="--proj-color:var(--accent4)">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:var(--accent4)">PROJECT // 04</div>
+          <div class="proj-title">Spam Detection with SVM & Kernel Trick</div>
+          <div class="proj-desc">Understand how SVMs find the maximum-margin hyperplane and how the kernel trick maps data into higher dimensions to make non-linear problems linearly separable.</div>
+          <div class="tags">
+            <span class="tag">SVC</span>
+            <span class="tag">Kernel Trick</span>
+            <span class="tag">Support Vectors</span>
+            <span class="tag">Margin</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:var(--accent4)" onclick="openModal('m4')">
+          Open Full Lesson <span class="arrow">→</span>
+        </button>
+      </div>
+      <div class="viz-panel" id="viz4">
+        <canvas id="c4" width="440" height="380"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECT 5 ==================== -->
+<section class="section" id="proj5">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 05 — Ensemble Learning</div>
+      <div class="section-title" style="color:var(--accent5)">Random Forest</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.ensemble</span>
+  </div>
+
+  <div class="project-block" style="--proj-color:var(--accent5)">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:var(--accent5)">PROJECT // 05</div>
+          <div class="proj-title">Disease Prediction with Random Forest</div>
+          <div class="proj-desc">See how hundreds of decision trees vote together to make robust predictions. Explore bagging, feature importance, and how ensemble methods defeat overfitting.</div>
+          <div class="tags">
+            <span class="tag">RandomForestClassifier</span>
+            <span class="tag">Bagging</span>
+            <span class="tag">Feature Importance</span>
+            <span class="tag">OOB Score</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:var(--accent5);color:#000" onclick="openModal('m5')">
+          Open Full Lesson <span class="arrow">→</span>
+        </button>
+      </div>
+      <div class="viz-panel" id="viz5">
+        <canvas id="c5" width="440" height="380"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Machine Learning Visual Lab · Built for scikit-learn learners · Interactive & Animated
+</footer>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- MODAL 1: Linear Regression -->
+<div class="modal-overlay" id="m1">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--accent1);letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 01 // LINEAR REGRESSION</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">House Price Predictor</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m1')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:var(--accent1)">
+
+  <h2>📖 What is Linear Regression?</h2>
+  <p>Linear regression is the foundational supervised learning algorithm that models the relationship between input features and a continuous output by fitting a straight line (or hyperplane) through the data.</p>
+
+  <div class="formula">y = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ + ε</div>
+  <p>The goal is to find β values that minimize the <strong style="color:var(--text)">Mean Squared Error (MSE)</strong> — the average squared distance between predicted and actual values.</p>
+
+  <div class="concepts">
+    <div class="concept-card">
+      <div class="concept-icon">🎯</div>
+      <div class="concept-title">Cost Function</div>
+      <div class="concept-desc">MSE = (1/n)Σ(yᵢ - ŷᵢ)². We minimize this with gradient descent or the normal equation.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">📐</div>
+      <div class="concept-title">R² Score</div>
+      <div class="concept-desc">Coefficient of determination: how much variance is explained. 1.0 = perfect, 0 = baseline mean model.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">⚖️</div>
+      <div class="concept-title">Feature Scaling</div>
+      <div class="concept-desc">StandardScaler normalizes features to zero mean and unit variance for stable convergence.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">✂️</div>
+      <div class="concept-title">Train/Test Split</div>
+      <div class="concept-desc">80% training, 20% testing. Never evaluate on training data — that's cheating!</div>
+    </div>
+  </div>
+
+  <h2>🪜 Step-by-Step Pipeline</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">01</div><div class="step-text"><strong>Load Data</strong> — Use the California Housing dataset or Boston Housing. Explore with df.head(), df.describe(), df.corr().</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-text"><strong>Preprocess</strong> — Handle missing values, encode categoricals, scale numeric features with StandardScaler or MinMaxScaler.</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-text"><strong>Split</strong> — train_test_split(X, y, test_size=0.2, random_state=42) ensures reproducibility.</div></div>
+    <div class="step"><div class="step-num">04</div><div class="step-text"><strong>Fit</strong> — model = LinearRegression(); model.fit(X_train, y_train) — scikit-learn handles all math internally.</div></div>
+    <div class="step"><div class="step-num">05</div><div class="step-text"><strong>Evaluate</strong> — Compute MSE, RMSE, R² on the test set. Compare train vs. test score to detect overfitting.</div></div>
+    <div class="step"><div class="step-num">06</div><div class="step-text"><strong>Interpret</strong> — model.coef_ reveals feature importance. Positive coefficient = positive correlation with house price.</div></div>
+  </div>
+
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="code-filename">house_price_predictor.py</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="cm"># ═══ House Price Predictor with Linear Regression ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> pandas <span class="kw">as</span> pd
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> fetch_california_housing
+<span class="imp">from</span> sklearn.model_selection <span class="imp">import</span> train_test_split
+<span class="imp">from</span> sklearn.linear_model <span class="imp">import</span> LinearRegression
+<span class="imp">from</span> sklearn.preprocessing <span class="imp">import</span> StandardScaler
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> mean_squared_error, r2_score
+
+<span class="cm"># ── 1. Load Dataset ──────────────────────────────────</span>
+data = <span class="fn">fetch_california_housing</span>()
+df = pd.<span class="fn">DataFrame</span>(data.data, columns=data.feature_names)
+df[<span class="str">'Price'</span>] = data.target
+<span class="fn">print</span>(df.<span class="fn">describe</span>())
+
+<span class="cm"># ── 2. Features & Target ─────────────────────────────</span>
+X = df.drop(<span class="str">'Price'</span>, axis=<span class="num">1</span>)
+y = df[<span class="str">'Price'</span>]
+
+<span class="cm"># ── 3. Train/Test Split ───────────────────────────────</span>
+X_train, X_test, y_train, y_test = <span class="fn">train_test_split</span>(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>
+)
+
+<span class="cm"># ── 4. Feature Scaling ───────────────────────────────</span>
+scaler = <span class="cls">StandardScaler</span>()
+X_train_sc = scaler.<span class="fn">fit_transform</span>(X_train)  <span class="cm"># fit + transform</span>
+X_test_sc  = scaler.<span class="fn">transform</span>(X_test)       <span class="cm"># transform only!</span>
+
+<span class="cm"># ── 5. Train Model ───────────────────────────────────</span>
+model = <span class="cls">LinearRegression</span>()
+model.<span class="fn">fit</span>(X_train_sc, y_train)
+
+<span class="cm"># ── 6. Predict & Evaluate ────────────────────────────</span>
+y_pred = model.<span class="fn">predict</span>(X_test_sc)
+
+mse  = <span class="fn">mean_squared_error</span>(y_test, y_pred)
+rmse = np.<span class="fn">sqrt</span>(mse)
+r2   = <span class="fn">r2_score</span>(y_test, y_pred)
+
+<span class="fn">print</span>(<span class="str">f"RMSE : {rmse:.4f}"</span>)
+<span class="fn">print</span>(<span class="str">f"R²   : {r2:.4f}"</span>)
+
+<span class="cm"># ── 7. Feature Importance ────────────────────────────</span>
+coeff_df = pd.<span class="fn">DataFrame</span>({
+    <span class="str">'Feature'</span>: X.columns,
+    <span class="str">'Coefficient'</span>: model.coef_
+}).<span class="fn">sort_values</span>(<span class="str">'Coefficient'</span>, ascending=<span class="num">False</span>)
+<span class="fn">print</span>(coeff_df)
+
+<span class="cm"># ── 8. Visualize Predictions ─────────────────────────</span>
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>, <span class="num">6</span>))
+plt.<span class="fn">scatter</span>(y_test, y_pred, alpha=<span class="num">0.4</span>, color=<span class="str">'#00e5ff'</span>)
+plt.<span class="fn">plot</span>([y.min(), y.max()],
+         [y.min(), y.max()], <span class="str">'r--'</span>, lw=<span class="num">2</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">'Actual Price'</span>)
+plt.<span class="fn">ylabel</span>(<span class="str">'Predicted Price'</span>)
+plt.<span class="fn">title</span>(<span class="str">f'Linear Regression  |  R² = {r2:.3f}'</span>)
+plt.<span class="fn">tight_layout</span>()
+plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 9. Residuals Plot ────────────────────────────────</span>
+residuals = y_test - y_pred
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>, <span class="num">4</span>))
+plt.<span class="fn">scatter</span>(y_pred, residuals, alpha=<span class="num">0.4</span>, color=<span class="str">'#7c3aff'</span>)
+plt.<span class="fn">axhline</span>(<span class="num">0</span>, color=<span class="str">'red'</span>, linestyle=<span class="str">'--'</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">'Predicted'</span>); plt.<span class="fn">ylabel</span>(<span class="str">'Residuals'</span>)
+plt.<span class="fn">title</span>(<span class="str">'Residuals Plot — should be random!'</span>)
+plt.<span class="fn">tight_layout</span>()
+plt.<span class="fn">show</span>()</pre>
+  </div>
+
+  <h2>🎮 Live Regression Playground</h2>
+  <div class="demo-container">
+    <div class="demo-title">Adjust noise & see how R² changes</div>
+    <div class="demo-controls">
+      <div class="demo-slider">
+        <label>Noise Level: <span id="noiseVal">0.3</span></label>
+        <input type="range" id="noiseSlider" min="0.05" max="1.5" step="0.05" value="0.3" oninput="updateRegDemo()">
+      </div>
+      <div class="demo-slider">
+        <label>Data Points: <span id="nVal">60</span></label>
+        <input type="range" id="nSlider" min="20" max="150" step="10" value="60" oninput="updateRegDemo()">
+      </div>
+      <button class="demo-btn primary" onclick="regData=null;updateRegDemo()">🔀 New Data</button>
+    </div>
+    <canvas id="regCanvas" width="560" height="280"></canvas>
+    <div id="regStats" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:0.75rem;display:flex;gap:2rem"></div>
+  </div>
+</div></div></div>
+
+<!-- MODAL 2: Decision Tree -->
+<div class="modal-overlay" id="m2">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--accent2);letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 02 // DECISION TREE</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Iris Flower Classifier</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m2')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:var(--accent2)">
+
+  <h2>🌿 How Decision Trees Work</h2>
+  <p>A decision tree recursively splits data by choosing the feature and threshold that best separates classes. At each node, it asks a yes/no question. The goal is to create pure leaf nodes (only one class).</p>
+
+  <div class="formula">Gini = 1 − Σ pᵢ²  |  Entropy = −Σ pᵢ log₂(pᵢ)  |  Info Gain = Parent − Weighted Children</div>
+
+  <div class="concepts">
+    <div class="concept-card">
+      <div class="concept-icon">🍃</div>
+      <div class="concept-title">Gini Impurity</div>
+      <div class="concept-desc">0 = perfectly pure node, 0.5 = maximally impure. Lower is better after a split.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">📊</div>
+      <div class="concept-title">Information Gain</div>
+      <div class="concept-desc">How much entropy decreases after the split. Choose the feature with max gain.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">✂️</div>
+      <div class="concept-title">Pruning</div>
+      <div class="concept-desc">max_depth, min_samples_leaf prevent overfitting by limiting tree complexity.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🎭</div>
+      <div class="concept-title">Overfitting</div>
+      <div class="concept-desc">Deep trees memorize training data. Use cross-validation to pick optimal depth.</div>
+    </div>
+  </div>
+
+  <h2>🪜 Pipeline Steps</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">01</div><div class="step-text"><strong>Load Iris</strong> — 150 samples, 3 classes (setosa, versicolor, virginica), 4 features (sepal/petal length & width).</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-text"><strong>No Scaling Needed</strong> — Decision trees are scale-invariant! They use thresholds, not distances.</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-text"><strong>Tune Hyperparameters</strong> — Try criterion='gini' vs 'entropy', vary max_depth from 1 to 10 and plot accuracy.</div></div>
+    <div class="step"><div class="step-num">04</div><div class="step-text"><strong>Visualize Tree</strong> — plot_tree() or export_graphviz() lets you see every decision node in the tree.</div></div>
+    <div class="step"><div class="step-num">05</div><div class="step-text"><strong>Confusion Matrix</strong> — ConfusionMatrixDisplay reveals which classes get confused with each other.</div></div>
+  </div>
+
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="code-filename">iris_decision_tree.py</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="cm"># ═══ Iris Classifier with Decision Tree ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> load_iris
+<span class="imp">from</span> sklearn.tree <span class="imp">import</span> DecisionTreeClassifier, plot_tree
+<span class="imp">from</span> sklearn.model_selection <span class="imp">import</span> train_test_split, cross_val_score
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> classification_report, ConfusionMatrixDisplay
+
+<span class="cm"># ── 1. Load Data ──────────────────────────────────────</span>
+iris = <span class="fn">load_iris</span>()
+X, y = iris.data, iris.target
+feature_names = iris.feature_names
+class_names   = iris.target_names
+<span class="fn">print</span>(<span class="str">f"Shape: {X.shape}, Classes: {class_names}"</span>)
+
+<span class="cm"># ── 2. Split ──────────────────────────────────────────</span>
+X_tr, X_te, y_tr, y_te = <span class="fn">train_test_split</span>(
+    X, y, test_size=<span class="num">0.25</span>, random_state=<span class="num">0</span>, stratify=y
+)
+
+<span class="cm"># ── 3. Find Optimal Depth with Cross-Validation ───────</span>
+depths = <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>)
+cv_scores = [
+    <span class="fn">cross_val_score</span>(
+        <span class="cls">DecisionTreeClassifier</span>(max_depth=d), X, y, cv=<span class="num">5</span>
+    ).<span class="fn">mean</span>()
+    <span class="kw">for</span> d <span class="kw">in</span> depths
+]
+best_depth = depths[np.<span class="fn">argmax</span>(cv_scores)]
+<span class="fn">print</span>(<span class="str">f"Best depth: {best_depth}"</span>)
+
+<span class="cm"># ── 4. Train Best Model ───────────────────────────────</span>
+clf = <span class="cls">DecisionTreeClassifier</span>(
+    max_depth=best_depth,
+    criterion=<span class="str">'gini'</span>,
+    random_state=<span class="num">42</span>
+)
+clf.<span class="fn">fit</span>(X_tr, y_tr)
+
+<span class="cm"># ── 5. Evaluate ───────────────────────────────────────</span>
+y_pred = clf.<span class="fn">predict</span>(X_te)
+<span class="fn">print</span>(<span class="fn">classification_report</span>(y_te, y_pred, target_names=class_names))
+
+<span class="cm"># ── 6. Visualize Tree ─────────────────────────────────</span>
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="num">16</span>, <span class="num">8</span>))
+<span class="fn">plot_tree</span>(clf,
+          feature_names=feature_names,
+          class_names=class_names,
+          filled=<span class="num">True</span>, rounded=<span class="num">True</span>,
+          fontsize=<span class="num">9</span>, ax=ax)
+plt.<span class="fn">title</span>(<span class="str">f'Decision Tree (depth={best_depth})'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 7. Confusion Matrix ───────────────────────────────</span>
+<span class="cls">ConfusionMatrixDisplay</span>.<span class="fn">from_estimator</span>(
+    clf, X_te, y_te,
+    display_labels=class_names,
+    cmap=<span class="str">'Purples'</span>
+)
+plt.<span class="fn">title</span>(<span class="str">'Confusion Matrix'</span>)
+plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 8. Decision Boundary (2D) ────────────────────────</span>
+<span class="cm"># Use only petal length & width for visualization</span>
+clf2d = <span class="cls">DecisionTreeClassifier</span>(max_depth=<span class="num">3</span>).<span class="fn">fit</span>(X_tr[:, <span class="num">2</span>:], y_tr)
+xx, yy = np.<span class="fn">meshgrid</span>(np.<span class="fn">linspace</span>(<span class="num">0</span>, <span class="num">7</span>, <span class="num">300</span>),
+                       np.<span class="fn">linspace</span>(<span class="num">0</span>, <span class="num">2.5</span>, <span class="num">300</span>))
+Z = clf2d.<span class="fn">predict</span>(np.c_[xx.<span class="fn">ravel</span>(), yy.<span class="fn">ravel</span>()]).<span class="fn">reshape</span>(xx.shape)
+plt.<span class="fn">contourf</span>(xx, yy, Z, alpha=<span class="num">0.3</span>, cmap=<span class="str">'Set2'</span>)
+plt.<span class="fn">scatter</span>(X[:, <span class="num">2</span>], X[:, <span class="num">3</span>], c=y, cmap=<span class="str">'Set1'</span>, edgecolors=<span class="str">'k'</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">'Petal length (cm)'</span>); plt.<span class="fn">ylabel</span>(<span class="str">'Petal width (cm)'</span>)
+plt.<span class="fn">title</span>(<span class="str">'Decision Tree Boundaries'</span>)
+plt.<span class="fn">show</span>()</pre>
+  </div>
+
+  <h2>🎮 Tree Animator</h2>
+  <div class="demo-container">
+    <div class="demo-title">Watch the decision tree split data step by step</div>
+    <div class="demo-controls">
+      <div class="demo-slider">
+        <label>Tree Depth: <span id="depthVal">3</span></label>
+        <input type="range" id="depthSlider" min="1" max="5" step="1" value="3" oninput="updateTreeDemo()">
+      </div>
+      <button class="demo-btn primary" onclick="animateTree()">▶ Animate Splits</button>
+      <button class="demo-btn" onclick="resetTree()">↺ Reset</button>
+    </div>
+    <canvas id="treeCanvas" width="560" height="300"></canvas>
+  </div>
+</div></div></div>
+
+<!-- MODAL 3: K-Means -->
+<div class="modal-overlay" id="m3">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--accent3);letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 03 // K-MEANS CLUSTERING</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Customer Segmentation</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m3')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:var(--accent3)">
+
+  <h2>🔵 The K-Means Algorithm</h2>
+  <p>K-Means is an unsupervised algorithm that partitions n observations into k clusters. Each observation belongs to the cluster with the nearest centroid (mean). It alternates between two steps until convergence:</p>
+
+  <div class="formula">Step 1 (Assign): cᵢ = argminⱼ ||xᵢ − μⱼ||²  |  Step 2 (Update): μⱼ = (1/|Cⱼ|) Σᵢ∈Cⱼ xᵢ</div>
+
+  <div class="concepts">
+    <div class="concept-card">
+      <div class="concept-icon">📍</div>
+      <div class="concept-title">Centroid Init</div>
+      <div class="concept-desc">k-means++ picks initial centroids spread far apart, dramatically improving convergence speed & quality.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">📏</div>
+      <div class="concept-title">Inertia</div>
+      <div class="concept-desc">Sum of squared distances from each point to its centroid. Lower = tighter clusters. Used in elbow method.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">↕️</div>
+      <div class="concept-title">Elbow Method</div>
+      <div class="concept-desc">Plot inertia vs. k. The "elbow" (diminishing returns) suggests the optimal number of clusters.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🎯</div>
+      <div class="concept-title">Silhouette Score</div>
+      <div class="concept-desc">Ranges -1 to 1. Measures how similar a point is to its own cluster vs. neighboring clusters.</div>
+    </div>
+  </div>
+
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="code-filename">customer_segmentation.py</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="cm"># ═══ Customer Segmentation with K-Means ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> pandas <span class="kw">as</span> pd
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.cluster <span class="imp">import</span> KMeans
+<span class="imp">from</span> sklearn.preprocessing <span class="imp">import</span> StandardScaler
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> silhouette_score
+<span class="imp">from</span> sklearn.decomposition <span class="imp">import</span> PCA
+
+<span class="cm"># ── 1. Simulated Customer Data ────────────────────────</span>
+np.random.<span class="fn">seed</span>(<span class="num">42</span>)
+n = <span class="num">500</span>
+data = {
+    <span class="str">'annual_income'</span>  : np.random.<span class="fn">normal</span>(<span class="num">50000</span>, <span class="num">20000</span>, n).<span class="fn">clip</span>(<span class="num">15000</span>),
+    <span class="str">'spending_score'</span> : np.random.<span class="fn">uniform</span>(<span class="num">1</span>, <span class="num">100</span>, n),
+    <span class="str">'age'</span>            : np.random.<span class="fn">randint</span>(<span class="num">18</span>, <span class="num">70</span>, n),
+    <span class="str">'purchase_freq'</span>  : np.random.<span class="fn">poisson</span>(<span class="num">8</span>, n),
+}
+df = pd.<span class="fn">DataFrame</span>(data)
+
+<span class="cm"># ── 2. Scale Features ─────────────────────────────────</span>
+scaler = <span class="cls">StandardScaler</span>()
+X_scaled = scaler.<span class="fn">fit_transform</span>(df)
+
+<span class="cm"># ── 3. Elbow Method — Find Optimal K ─────────────────</span>
+inertias, sil_scores = [], []
+K_range = <span class="fn">range</span>(<span class="num">2</span>, <span class="num">11</span>)
+
+<span class="kw">for</span> k <span class="kw">in</span> K_range:
+    km = <span class="cls">KMeans</span>(n_clusters=k, init=<span class="str">'k-means++'</span>,
+                n_init=<span class="num">10</span>, random_state=<span class="num">42</span>)
+    labels = km.<span class="fn">fit_predict</span>(X_scaled)
+    inertias.<span class="fn">append</span>(km.inertia_)
+    sil_scores.<span class="fn">append</span>(<span class="fn">silhouette_score</span>(X_scaled, labels))
+
+<span class="cm"># ── 4. Plot Elbow + Silhouette ────────────────────────</span>
+fig, (ax1, ax2) = plt.<span class="fn">subplots</span>(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">12</span>, <span class="num">4</span>))
+ax1.<span class="fn">plot</span>(K_range, inertias, <span class="str">'o-'</span>, color=<span class="str">'#ff6b35'</span>)
+ax1.<span class="fn">set_xlabel</span>(<span class="str">'Number of Clusters (k)'</span>)
+ax1.<span class="fn">set_ylabel</span>(<span class="str">'Inertia'</span>); ax1.<span class="fn">set_title</span>(<span class="str">'Elbow Method'</span>)
+ax2.<span class="fn">plot</span>(K_range, sil_scores, <span class="str">'s-'</span>, color=<span class="str">'#00e5ff'</span>)
+ax2.<span class="fn">set_xlabel</span>(<span class="str">'Number of Clusters (k)'</span>)
+ax2.<span class="fn">set_ylabel</span>(<span class="str">'Silhouette Score'</span>)
+ax2.<span class="fn">set_title</span>(<span class="str">'Silhouette Analysis'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 5. Final Model (k=4) ──────────────────────────────</span>
+K_BEST = <span class="num">4</span>
+km_final = <span class="cls">KMeans</span>(n_clusters=K_BEST, init=<span class="str">'k-means++'</span>,
+                   n_init=<span class="num">10</span>, random_state=<span class="num">42</span>)
+df[<span class="str">'Cluster'</span>] = km_final.<span class="fn">fit_predict</span>(X_scaled)
+
+<span class="cm"># ── 6. PCA for 2D Visualization ───────────────────────</span>
+pca = <span class="cls">PCA</span>(n_components=<span class="num">2</span>)
+X_pca = pca.<span class="fn">fit_transform</span>(X_scaled)
+centroids_pca = pca.<span class="fn">transform</span>(km_final.cluster_centers_)
+
+colors = [<span class="str">'#ff6b35'</span>, <span class="str">'#00e5ff'</span>, <span class="str">'#00ff88'</span>, <span class="str">'#ffd600'</span>]
+plt.<span class="fn">figure</span>(figsize=(<span class="num">9</span>, <span class="num">7</span>))
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(K_BEST):
+    mask = df[<span class="str">'Cluster'</span>] == i
+    plt.<span class="fn">scatter</span>(X_pca[mask, <span class="num">0</span>], X_pca[mask, <span class="num">1</span>],
+                alpha=<span class="num">0.6</span>, color=colors[i], label=<span class="str">f'Segment {i+1}'</span>)
+plt.<span class="fn">scatter</span>(centroids_pca[:, <span class="num">0</span>], centroids_pca[:, <span class="num">1</span>],
+            s=<span class="num">300</span>, marker=<span class="str">'X'</span>, c=<span class="str">'white'</span>, edgecolors=<span class="str">'black'</span>,
+            zorder=<span class="num">5</span>, label=<span class="str">'Centroids'</span>)
+plt.<span class="fn">legend</span>(); plt.<span class="fn">title</span>(<span class="str">f'Customer Segments (k={K_BEST}, PCA)'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 7. Segment Profiles ───────────────────────────────</span>
+<span class="fn">print</span>(df.<span class="fn">groupby</span>(<span class="str">'Cluster'</span>).<span class="fn">mean</span>().<span class="fn">round</span>(<span class="num">1</span>))</pre>
+  </div>
+
+  <h2>🎮 Live K-Means Animator</h2>
+  <div class="demo-container">
+    <div class="demo-title">Watch centroids converge in real time</div>
+    <div class="demo-controls">
+      <div class="demo-slider">
+        <label>Clusters (K): <span id="kVal">3</span></label>
+        <input type="range" id="kSlider" min="2" max="6" step="1" value="3" oninput="document.getElementById('kVal').textContent=this.value;initKMeans()">
+      </div>
+      <button class="demo-btn primary" onclick="stepKMeans()">⏭ Next Step</button>
+      <button class="demo-btn" onclick="autoKMeans()">▶ Auto Run</button>
+      <button class="demo-btn" onclick="initKMeans()">🔀 New Data</button>
+    </div>
+    <canvas id="kmeansCanvas" width="560" height="300"></canvas>
+    <div id="kmeansInfo" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:0.5rem"></div>
+  </div>
+</div></div></div>
+
+<!-- MODAL 4: SVM -->
+<div class="modal-overlay" id="m4">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--accent4);letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 04 // SUPPORT VECTOR MACHINE</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Spam Detector</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m4')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:var(--accent4)">
+
+  <h2>🛡️ Support Vector Machines</h2>
+  <p>SVMs find the optimal hyperplane that maximizes the margin between classes. The points closest to the boundary are called <strong style="color:var(--text)">support vectors</strong> — they define the margin entirely.</p>
+
+  <div class="formula">maximize: 2/||w||  subject to: yᵢ(w·xᵢ + b) ≥ 1  |  Soft margin: + C·Σξᵢ</div>
+
+  <div class="concepts">
+    <div class="concept-card">
+      <div class="concept-icon">✈️</div>
+      <div class="concept-title">Hyperplane</div>
+      <div class="concept-desc">In 2D it's a line; in 3D a plane; in nD a hyperplane. It separates the two classes optimally.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">↔️</div>
+      <div class="concept-title">Margin</div>
+      <div class="concept-desc">The gap between the two class boundaries. Maximizing margin improves generalization.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🔧</div>
+      <div class="concept-title">C Parameter</div>
+      <div class="concept-desc">Controls soft margin. High C = fewer misclassifications (may overfit). Low C = wider margin.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🌀</div>
+      <div class="concept-title">Kernel Trick</div>
+      <div class="concept-desc">RBF, polynomial, sigmoid kernels map data to higher dimensions making non-linear data separable.</div>
+    </div>
+  </div>
+
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="code-filename">spam_detector_svm.py</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="cm"># ═══ Spam Detector with SVM ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> make_classification
+<span class="imp">from</span> sklearn.svm <span class="imp">import</span> SVC
+<span class="imp">from</span> sklearn.model_selection <span class="imp">import</span> train_test_split, GridSearchCV
+<span class="imp">from</span> sklearn.preprocessing <span class="imp">import</span> StandardScaler
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> (classification_report,
+                              RocCurveDisplay, roc_auc_score)
+<span class="imp">from</span> sklearn.pipeline <span class="imp">import</span> Pipeline
+
+<span class="cm"># ── 1. Synthetic Spam Dataset ─────────────────────────</span>
+X, y = <span class="fn">make_classification</span>(
+    n_samples=<span class="num">1000</span>, n_features=<span class="num">20</span>,
+    n_informative=<span class="num">10</span>, n_redundant=<span class="num">5</span>,
+    random_state=<span class="num">42</span>
+)
+
+X_tr, X_te, y_tr, y_te = <span class="fn">train_test_split</span>(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>
+)
+
+<span class="cm"># ── 2. Pipeline: Scale → SVM ──────────────────────────</span>
+pipe = <span class="cls">Pipeline</span>([
+    (<span class="str">'scaler'</span>, <span class="cls">StandardScaler</span>()),
+    (<span class="str">'svm'</span>   , <span class="cls">SVC</span>(kernel=<span class="str">'rbf'</span>, probability=<span class="num">True</span>))
+])
+
+<span class="cm"># ── 3. Grid Search for C & gamma ─────────────────────</span>
+param_grid = {
+    <span class="str">'svm__C'</span>     : [<span class="num">0.1</span>, <span class="num">1</span>, <span class="num">10</span>, <span class="num">100</span>],
+    <span class="str">'svm__gamma'</span> : [<span class="str">'scale'</span>, <span class="str">'auto'</span>, <span class="num">0.001</span>, <span class="num">0.01</span>],
+}
+gs = <span class="cls">GridSearchCV</span>(pipe, param_grid, cv=<span class="num">5</span>,
+                   scoring=<span class="str">'roc_auc'</span>, n_jobs=-<span class="num">1</span>)
+gs.<span class="fn">fit</span>(X_tr, y_tr)
+<span class="fn">print</span>(<span class="str">f"Best params: {gs.best_params_}"</span>)
+<span class="fn">print</span>(<span class="str">f"Best CV AUC: {gs.best_score_:.4f}"</span>)
+
+<span class="cm"># ── 4. Evaluate Best Model ────────────────────────────</span>
+best = gs.best_estimator_
+y_pred = best.<span class="fn">predict</span>(X_te)
+y_prob = best.<span class="fn">predict_proba</span>(X_te)[:, <span class="num">1</span>]
+
+<span class="fn">print</span>(<span class="fn">classification_report</span>(y_te, y_pred,
+      target_names=[<span class="str">'Ham'</span>, <span class="str">'Spam'</span>]))
+<span class="fn">print</span>(<span class="str">f"Test AUC: {roc_auc_score(y_te, y_prob):.4f}"</span>)
+
+<span class="cm"># ── 5. ROC Curve ─────────────────────────────────────</span>
+<span class="cls">RocCurveDisplay</span>.<span class="fn">from_estimator</span>(best, X_te, y_te)
+plt.<span class="fn">title</span>(<span class="str">'ROC Curve — SVM Spam Detector'</span>)
+plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 6. 2D Decision Boundary (2 features) ─────────────</span>
+X_2d, _ = <span class="fn">make_classification</span>(n_features=<span class="num">2</span>, n_redundant=<span class="num">0</span>,
+                                n_informative=<span class="num">2</span>, random_state=<span class="num">42</span>)
+svm2d = <span class="cls">Pipeline</span>([(<span class="str">'sc'</span>, <span class="cls">StandardScaler</span>()),
+                    (<span class="str">'sv'</span>, <span class="cls">SVC</span>(kernel=<span class="str">'rbf'</span>, C=<span class="num">1</span>))])
+svm2d.<span class="fn">fit</span>(X_2d, y)
+
+xx, yy = np.<span class="fn">meshgrid</span>(np.<span class="fn">linspace</span>(-<span class="num">3</span>, <span class="num">3</span>, <span class="num">300</span>),
+                       np.<span class="fn">linspace</span>(-<span class="num">3</span>, <span class="num">3</span>, <span class="num">300</span>))
+Z = svm2d.<span class="fn">predict</span>(np.c_[xx.<span class="fn">ravel</span>(), yy.<span class="fn">ravel</span>()]).<span class="fn">reshape</span>(xx.shape)
+
+plt.<span class="fn">contourf</span>(xx, yy, Z, alpha=<span class="num">0.3</span>, cmap=<span class="str">'RdYlGn'</span>)
+plt.<span class="fn">contour</span>(xx, yy, Z, linewidths=<span class="num">2</span>, colors=<span class="str">'white'</span>)
+plt.<span class="fn">scatter</span>(X_2d[:, <span class="num">0</span>], X_2d[:, <span class="num">1</span>], c=y,
+            cmap=<span class="str">'RdYlGn'</span>, edgecolors=<span class="str">'k'</span>, alpha=<span class="num">0.7</span>)
+plt.<span class="fn">title</span>(<span class="str">'SVM Decision Boundary (RBF Kernel)'</span>)
+plt.<span class="fn">show</span>()</pre>
+  </div>
+
+  <h2>🎮 SVM Margin Visualizer</h2>
+  <div class="demo-container">
+    <div class="demo-title">Move C slider to watch how the margin and support vectors change</div>
+    <div class="demo-controls">
+      <div class="demo-slider">
+        <label>C (Regularization): <span id="cVal">1.0</span></label>
+        <input type="range" id="cSlider" min="0.1" max="10" step="0.1" value="1.0" oninput="updateSVM()">
+      </div>
+      <button class="demo-btn" id="kernelBtn" onclick="toggleKernel()">Kernel: Linear</button>
+      <button class="demo-btn primary" onclick="svmData=null;updateSVM()">🔀 New Data</button>
+    </div>
+    <canvas id="svmCanvas" width="560" height="300"></canvas>
+  </div>
+</div></div></div>
+
+<!-- MODAL 5: Random Forest -->
+<div class="modal-overlay" id="m5">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--accent5);letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 05 // RANDOM FOREST</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Disease Risk Predictor</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m5')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:var(--accent5)">
+
+  <h2>🌲 Random Forest = Ensemble of Trees</h2>
+  <p>Random Forest builds many decision trees on random subsets of data (bootstrap sampling) and random subsets of features. Each tree votes on the final prediction — this is called <strong style="color:var(--text)">bagging</strong>. The wisdom of the crowd beats any single tree.</p>
+
+  <div class="formula">ŷ = mode{ T₁(x), T₂(x), ..., Tₙ(x) }  (classification)  |  ŷ = mean{ T₁(x),...,Tₙ(x) }  (regression)</div>
+
+  <div class="concepts">
+    <div class="concept-card">
+      <div class="concept-icon">🎒</div>
+      <div class="concept-title">Bootstrap Sampling</div>
+      <div class="concept-desc">Each tree trains on a random sample drawn with replacement (~63% unique samples). Rest = OOB data.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🎲</div>
+      <div class="concept-title">Feature Randomness</div>
+      <div class="concept-desc">At each split, only √p features are considered (p = total features). Reduces tree correlation.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🏆</div>
+      <div class="concept-title">Feature Importance</div>
+      <div class="concept-desc">Mean decrease in impurity (MDI) across all trees tells you which features matter most.</div>
+    </div>
+    <div class="concept-card">
+      <div class="concept-icon">🧪</div>
+      <div class="concept-title">OOB Score</div>
+      <div class="concept-desc">Out-of-bag samples act as built-in validation. oob_score=True gives free performance estimate.</div>
+    </div>
+  </div>
+
+  <h2>🪜 Pipeline Steps</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">01</div><div class="step-text"><strong>Dataset</strong> — Use Breast Cancer Wisconsin dataset (569 samples, 30 features, binary classification: malignant vs benign).</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-text"><strong>No Scaling Needed</strong> — Random Forest is tree-based and scale-invariant. Feature ranges don't matter.</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-text"><strong>Tune n_estimators</strong> — Start with 100, plot OOB error vs. tree count. Diminishing returns after ~200 trees.</div></div>
+    <div class="step"><div class="step-num">04</div><div class="step-text"><strong>Feature Importance</strong> — model.feature_importances_ gives a Gini importance score for each feature.</div></div>
+    <div class="step"><div class="step-num">05</div><div class="step-text"><strong>SHAP Values</strong> — For interpretability, use the shap library to see per-prediction feature contributions.</div></div>
+  </div>
+
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+      <span class="code-filename">disease_predictor_rf.py</span>
+      <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+    </div>
+    <pre><span class="cm"># ═══ Disease Predictor with Random Forest ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> pandas <span class="kw">as</span> pd
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> load_breast_cancer
+<span class="imp">from</span> sklearn.ensemble <span class="imp">import</span> RandomForestClassifier
+<span class="imp">from</span> sklearn.model_selection <span class="imp">import</span> train_test_split, cross_val_score
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> (classification_report,
+                              RocCurveDisplay, roc_auc_score)
+
+<span class="cm"># ── 1. Load Dataset ───────────────────────────────────</span>
+data = <span class="fn">load_breast_cancer</span>()
+X = pd.<span class="fn">DataFrame</span>(data.data, columns=data.feature_names)
+y = pd.<span class="fn">Series</span>(data.target)
+<span class="fn">print</span>(<span class="str">f"Malignant: {(y==0).sum()} | Benign: {(y==1).sum()}"</span>)
+
+<span class="cm"># ── 2. Train/Test Split ───────────────────────────────</span>
+X_tr, X_te, y_tr, y_te = <span class="fn">train_test_split</span>(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>, stratify=y
+)
+
+<span class="cm"># ── 3. Train Random Forest ────────────────────────────</span>
+rf = <span class="cls">RandomForestClassifier</span>(
+    n_estimators=<span class="num">200</span>,       <span class="cm"># number of trees</span>
+    max_features=<span class="str">'sqrt'</span>,    <span class="cm"># features per split</span>
+    max_depth=<span class="kw">None</span>,          <span class="cm"># grow full trees</span>
+    min_samples_leaf=<span class="num">2</span>,      <span class="cm"># min samples per leaf</span>
+    oob_score=<span class="num">True</span>,          <span class="cm"># built-in validation</span>
+    n_jobs=-<span class="num">1</span>,               <span class="cm"># use all CPU cores</span>
+    random_state=<span class="num">42</span>
+)
+rf.<span class="fn">fit</span>(X_tr, y_tr)
+<span class="fn">print</span>(<span class="str">f"OOB Accuracy: {rf.oob_score_:.4f}"</span>)
+
+<span class="cm"># ── 4. Evaluate ───────────────────────────────────────</span>
+y_pred = rf.<span class="fn">predict</span>(X_te)
+y_prob = rf.<span class="fn">predict_proba</span>(X_te)[:, <span class="num">1</span>]
+<span class="fn">print</span>(<span class="fn">classification_report</span>(y_te, y_pred,
+      target_names=data.target_names))
+<span class="fn">print</span>(<span class="str">f"AUC-ROC: {roc_auc_score(y_te, y_prob):.4f}"</span>)
+
+<span class="cm"># ── 5. Feature Importance Plot ────────────────────────</span>
+importances = pd.<span class="fn">Series</span>(
+    rf.feature_importances_, index=X.columns
+).<span class="fn">sort_values</span>(ascending=<span class="num">False</span>)[:<span class="num">15</span>]
+
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="num">10</span>, <span class="num">6</span>))
+importances.<span class="fn">plot</span>.<span class="fn">barh</span>(ax=ax, color=<span class="str">'#ffd600'</span>)
+ax.<span class="fn">set_xlabel</span>(<span class="str">'Gini Importance'</span>)
+ax.<span class="fn">set_title</span>(<span class="str">'Top 15 Most Important Features'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 6. OOB Error vs. n_estimators ────────────────────</span>
+oob_errors = []
+<span class="kw">for</span> n <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>, <span class="num">300</span>, <span class="num">10</span>):
+    rf_temp = <span class="cls">RandomForestClassifier</span>(
+        n_estimators=n, oob_score=<span class="num">True</span>, random_state=<span class="num">42</span>
+    ).<span class="fn">fit</span>(X_tr, y_tr)
+    oob_errors.<span class="fn">append</span>(<span class="num">1</span> - rf_temp.oob_score_)
+
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>, <span class="num">4</span>))
+plt.<span class="fn">plot</span>(<span class="fn">range</span>(<span class="num">10</span>, <span class="num">300</span>, <span class="num">10</span>), oob_errors, color=<span class="str">'#ffd600'</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">'Number of Trees'</span>); plt.<span class="fn">ylabel</span>(<span class="str">'OOB Error'</span>)
+plt.<span class="fn">title</span>(<span class="str">'Error vs. Number of Trees'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 7. ROC Curve ─────────────────────────────────────</span>
+<span class="cls">RocCurveDisplay</span>.<span class="fn">from_estimator</span>(rf, X_te, y_te)
+plt.<span class="fn">title</span>(<span class="str">'ROC Curve — Random Forest'</span>)
+plt.<span class="fn">show</span>()</pre>
+  </div>
+
+  <h2>🎮 Forest Voting Visualizer</h2>
+  <div class="demo-container">
+    <div class="demo-title">Watch how tree votes accumulate into a final prediction</div>
+    <div class="demo-controls">
+      <div class="demo-slider">
+        <label>Number of Trees: <span id="treeCount">10</span></label>
+        <input type="range" id="treeSlider" min="1" max="50" step="1" value="10" oninput="updateForest()">
+      </div>
+      <button class="demo-btn primary" onclick="runForest()">🌲 Grow Forest</button>
+      <button class="demo-btn" onclick="resetForest()">↺ Reset</button>
+    </div>
+    <canvas id="forestCanvas" width="560" height="300"></canvas>
+    <div id="forestInfo" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:0.5rem"></div>
+  </div>
+</div></div></div>
+
+<script>
+// ── CURSOR ───────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx - 6 + 'px'; cursor.style.top = my - 6 + 'px'; });
+setInterval(() => { rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18; ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px'; }, 16);
+
+// ── STARFIELD ─────────────────────────────────────────
+(function() {
+  const c = document.getElementById('stars');
+  const ctx = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  const stars = Array.from({length: 180}, () => ({
+    x: Math.random() * c.width, y: Math.random() * c.height,
+    r: Math.random() * 1.2 + 0.2, a: Math.random(), da: (Math.random() - 0.5) * 0.005
+  }));
+  function draw() {
+    ctx.clearRect(0,0,c.width,c.height);
+    stars.forEach(s => {
+      s.a = Math.max(0.05, Math.min(1, s.a + s.da));
+      if (s.a <= 0.05 || s.a >= 1) s.da *= -1;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(200,220,255,${s.a})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+  window.addEventListener('resize', () => { c.width = window.innerWidth; c.height = window.innerHeight; });
+})();
+
+// ── MODAL ─────────────────────────────────────────────
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (id === 'm1') { setTimeout(updateRegDemo, 200); }
+  if (id === 'm2') { setTimeout(updateTreeDemo, 200); }
+  if (id === 'm3') { setTimeout(initKMeans, 200); }
+  if (id === 'm4') { setTimeout(() => { svmData = null; updateSVM(); }, 200); }
+  if (id === 'm5') { setTimeout(resetForest, 200); }
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) closeModal(o.id); }));
+
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent);
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = 'Copy', 2000);
+}
+
+// ── VIZ 1: Animated Regression Preview ──────────────
+(function() {
+  const cv = document.getElementById('c1');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  let pts = [], lineY1 = 0, lineY2 = H, animFrame = 0;
+  for (let i = 0; i < 40; i++) {
+    const x = 40 + Math.random() * (W - 80);
+    const y = H - (x * 0.6 + (Math.random() - 0.5) * 100 + 20);
+    pts.push({x, y: Math.max(20, Math.min(H-20, y))});
+  }
+  function draw() {
+    animFrame++;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+    // Grid
+    ctx.strokeStyle = 'rgba(26,37,64,0.8)'; ctx.lineWidth = 1;
+    for (let x = 40; x < W; x += 50) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for (let y = 20; y < H; y += 50) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    // Points
+    const prog = Math.min(1, animFrame / 80);
+    pts.forEach((p, i) => {
+      if (i / pts.length > prog) return;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(0,229,255,0.7)'; ctx.fill();
+      ctx.strokeStyle = 'rgba(0,229,255,0.3)'; ctx.lineWidth = 6; ctx.stroke();
+      ctx.lineWidth = 1;
+    });
+    // Regression line
+    const lp = Math.min(1, Math.max(0, (animFrame - 80) / 60));
+    if (lp > 0) {
+      const x1 = 30, y1 = H - (x1 * 0.6 + 20);
+      const x2 = W - 30, y2 = H - (x2 * 0.6 + 20);
+      const cx2 = x1 + (x2 - x1) * lp;
+      const cy2 = y1 + (y2 - y1) * lp;
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(cx2, cy2);
+      ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 2.5;
+      ctx.shadowColor = '#00e5ff'; ctx.shadowBlur = 12; ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── VIZ 2: Decision Tree Preview ─────────────────────
+(function() {
+  const cv = document.getElementById('c2');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const colors = ['rgba(124,58,255,0.25)', 'rgba(0,229,255,0.25)', 'rgba(0,255,136,0.25)'];
+  const pts = Array.from({length:60}, () => ({
+    x: 30 + Math.random()*(W-60), y: 30 + Math.random()*(H-60),
+    c: Math.floor(Math.random()*3)
+  }));
+  let t = 0;
+  const splitX = W/2, splitY = H*0.45;
+  function draw() {
+    t++;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+    // Regions
+    const p = Math.min(1, (t-60)/80);
+    if (t > 60) {
+      ctx.fillStyle = colors[0]; ctx.fillRect(0, 0, splitX*p, splitY*p);
+      ctx.fillStyle = colors[1]; ctx.fillRect(splitX*p, 0, (W-splitX)*p, splitY*p);
+      ctx.fillStyle = colors[2]; ctx.fillRect(0, splitY*p, W*p, (H-splitY)*p);
+    }
+    // Split lines
+    if (t > 40) {
+      const lp = Math.min(1, (t-40)/40);
+      ctx.strokeStyle = 'rgba(124,58,255,0.8)'; ctx.lineWidth = 1.5;
+      ctx.setLineDash([5,4]);
+      ctx.beginPath(); ctx.moveTo(splitX, 0); ctx.lineTo(splitX, H*lp); ctx.stroke();
+      if (lp > 0.5) {
+        const lp2 = (lp - 0.5) * 2;
+        ctx.beginPath(); ctx.moveTo(0, splitY); ctx.lineTo(splitX*lp2, splitY); ctx.stroke();
+      }
+      ctx.setLineDash([]);
+    }
+    // Points
+    pts.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+      const cls = ['#7c3aff','#00e5ff','#00ff88'][p.c];
+      ctx.fillStyle = cls; ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 1; ctx.stroke();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── VIZ 3: K-Means Preview ───────────────────────────
+(function() {
+  const cv = document.getElementById('c3');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const colors3 = ['#ff6b35','#00e5ff','#00ff88'];
+  const clusters = [
+    {cx:120, cy:120, pts: Array.from({length:20}, () => ({x:80+Math.random()*80, y:80+Math.random()*80}))},
+    {cx:320, cy:200, pts: Array.from({length:20}, () => ({x:280+Math.random()*80, y:160+Math.random()*80}))},
+    {cx:200, cy:300, pts: Array.from({length:20}, () => ({x:160+Math.random()*80, y:260+Math.random()*80}))},
+  ];
+  let t = 0;
+  function draw() {
+    t++;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+    clusters.forEach((cl, ci) => {
+      cl.pts.forEach(p => {
+        ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2);
+        ctx.fillStyle = colors3[ci] + 'aa'; ctx.fill();
+      });
+      const pulse = 1 + Math.sin(t * 0.05 + ci) * 0.3;
+      ctx.beginPath(); ctx.arc(cl.cx, cl.cy, 10 * pulse, 0, Math.PI*2);
+      ctx.fillStyle = colors3[ci]; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+      // Connect points
+      cl.pts.forEach(p => {
+        ctx.beginPath(); ctx.moveTo(cl.cx, cl.cy); ctx.lineTo(p.x, p.y);
+        ctx.strokeStyle = colors3[ci] + '20'; ctx.lineWidth = 1; ctx.stroke();
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── VIZ 4: SVM Preview ───────────────────────────────
+(function() {
+  const cv = document.getElementById('c4');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const pos = Array.from({length:20}, () => ({x:60+Math.random()*150, y:60+Math.random()*150}));
+  const neg = Array.from({length:20}, () => ({x:220+Math.random()*160, y:160+Math.random()*160}));
+  let t = 0;
+  function draw() {
+    t++;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+    // Decision boundary
+    const a = Math.PI/4 + Math.sin(t*0.005)*0.05;
+    const midX = W/2, midY = H/2;
+    const dx = Math.cos(a)*300, dy = Math.sin(a)*300;
+    ctx.beginPath(); ctx.moveTo(midX-dx, midY-dy); ctx.lineTo(midX+dx, midY+dy);
+    ctx.strokeStyle = '#00ff88'; ctx.lineWidth = 2.5;
+    ctx.shadowColor = '#00ff88'; ctx.shadowBlur = 15; ctx.stroke(); ctx.shadowBlur = 0;
+    // Margins
+    const off = 40;
+    const nx = -Math.sin(a)*off, ny = Math.cos(a)*off;
+    ['rgba(0,255,136,0.08)', 'rgba(0,255,136,0.08)'].forEach((c, i) => {
+      const s = i === 0 ? 1 : -1;
+      ctx.beginPath();
+      ctx.moveTo(midX-dx+nx*s, midY-dy+ny*s);
+      ctx.lineTo(midX+dx+nx*s, midY+dy+ny*s);
+      ctx.strokeStyle = 'rgba(0,255,136,0.3)'; ctx.lineWidth = 1;
+      ctx.setLineDash([6,4]); ctx.stroke(); ctx.setLineDash([]);
+    });
+    pos.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI*2); ctx.fillStyle = '#00e5ff'; ctx.fill(); });
+    neg.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI*2); ctx.fillStyle = '#ff6b35'; ctx.fill(); });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── VIZ 5: Random Forest Preview ─────────────────────
+(function() {
+  const cv = document.getElementById('c5');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  let t = 0;
+  function drawTree(x, y, len, angle, depth, maxDepth) {
+    if (depth > maxDepth || len < 3) return;
+    const x2 = x + Math.cos(angle) * len;
+    const y2 = y - Math.sin(angle) * len;
+    const frac = depth / maxDepth;
+    ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x2,y2);
+    ctx.strokeStyle = `rgba(255,214,0,${0.6-frac*0.4})`;
+    ctx.lineWidth = Math.max(0.5, 3 - depth);
+    ctx.stroke();
+    const spread = 0.4 + Math.sin(t*0.02+depth)*0.1;
+    drawTree(x2, y2, len*0.68, angle - spread, depth+1, maxDepth);
+    drawTree(x2, y2, len*0.68, angle + spread*0.8, depth+1, maxDepth);
+  }
+  function draw() {
+    t++;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+    const trees = [{x:80,l:55},{x:200,l:50},{x:320,l:60},{x:390,l:45}];
+    trees.forEach(tr => drawTree(tr.x, H-20, tr.l, Math.PI/2 + Math.sin(t*0.01+tr.x)*0.05, 0, 5));
+    // Vote bar
+    const voteY = 30;
+    ctx.fillStyle = 'rgba(255,214,0,0.15)'; ctx.fillRect(20, voteY-12, W-40, 24); 
+    const vp = (Math.sin(t*0.03)+1)/2;
+    ctx.fillStyle = '#ffd600'; ctx.fillRect(20, voteY-12, (W-40)*vp, 24);
+    ctx.fillStyle = '#000'; ctx.font = '700 11px Space Mono'; ctx.textAlign='center';
+    ctx.fillText(`VOTE: ${Math.round(vp*100)}% Benign`, W/2, voteY+4);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ═══ MODAL DEMOS ═══
+
+// ─── REGRESSION PLAYGROUND ───────────────────────────
+let regData = null;
+function getRegData() {
+  const n = +document.getElementById('nSlider').value;
+  const noise = +document.getElementById('noiseSlider').value;
+  const xs = Array.from({length:n}, () => Math.random()*8 - 1);
+  const ys = xs.map(x => 1.5*x + 2 + (Math.random()-0.5)*noise*6);
+  return {xs, ys};
+}
+function linReg(xs, ys) {
+  const n = xs.length;
+  const mx = xs.reduce((a,b)=>a+b,0)/n;
+  const my = ys.reduce((a,b)=>a+b,0)/n;
+  const num = xs.reduce((s,x,i)=>s+(x-mx)*(ys[i]-my),0);
+  const den = xs.reduce((s,x)=>s+(x-mx)**2,0);
+  const m = num/den, b = my - m*mx;
+  const ss_res = ys.reduce((s,y,i)=>s+(y-(m*xs[i]+b))**2,0);
+  const ss_tot = ys.reduce((s,y)=>s+(y-my)**2,0);
+  const r2 = 1 - ss_res/ss_tot;
+  return {m, b, r2};
+}
+function updateRegDemo() {
+  document.getElementById('noiseVal').textContent = (+document.getElementById('noiseSlider').value).toFixed(2);
+  document.getElementById('nVal').textContent = document.getElementById('nSlider').value;
+  if (!regData) regData = getRegData();
+  else {
+    const n = +document.getElementById('nSlider').value;
+    const noise = +document.getElementById('noiseSlider').value;
+    if (regData.xs.length !== n) regData = getRegData();
+    else { // regenerate ys with new noise
+      regData.ys = regData.xs.map(x => 1.5*x + 2 + (Math.random()-0.5)*noise*6);
+    }
+  }
+  const cv = document.getElementById('regCanvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const {xs, ys} = regData;
+  const minX = Math.min(...xs)-0.5, maxX = Math.max(...xs)+0.5;
+  const minY = Math.min(...ys)-0.5, maxY = Math.max(...ys)+0.5;
+  const px = x => 30 + (x-minX)/(maxX-minX)*(W-60);
+  const py = y => H-30 - (y-minY)/(maxY-minY)*(H-60);
+  const {m, b, r2} = linReg(xs, ys);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+  // Grid
+  ctx.strokeStyle = '#1a2540'; ctx.lineWidth = 1;
+  for (let gx = Math.ceil(minX); gx <= maxX; gx++) { ctx.beginPath(); ctx.moveTo(px(gx),0); ctx.lineTo(px(gx),H); ctx.stroke(); }
+  for (let gy = Math.ceil(minY); gy <= maxY; gy++) { ctx.beginPath(); ctx.moveTo(0,py(gy)); ctx.lineTo(W,py(gy)); ctx.stroke(); }
+  // Residuals
+  xs.forEach((x,i) => {
+    const predY = m*x+b;
+    ctx.beginPath(); ctx.moveTo(px(x), py(ys[i])); ctx.lineTo(px(x), py(predY));
+    ctx.strokeStyle = 'rgba(255,107,53,0.25)'; ctx.lineWidth = 1.5; ctx.stroke();
+  });
+  // Regression line
+  ctx.beginPath(); ctx.moveTo(px(minX), py(m*minX+b)); ctx.lineTo(px(maxX), py(m*maxX+b));
+  ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 2.5;
+  ctx.shadowColor = '#00e5ff'; ctx.shadowBlur = 10; ctx.stroke(); ctx.shadowBlur = 0;
+  // Points
+  xs.forEach((x,i) => {
+    ctx.beginPath(); ctx.arc(px(x), py(ys[i]), 5, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(0,229,255,0.8)'; ctx.fill();
+  });
+  document.getElementById('regStats').innerHTML =
+    `<span>slope: <b style="color:#00e5ff">${m.toFixed(3)}</b></span>
+     <span>intercept: <b style="color:#00e5ff">${b.toFixed(3)}</b></span>
+     <span>R²: <b style="color:${r2>0.7?'#00ff88':r2>0.4?'#ffd600':'#ff6b35'}">${r2.toFixed(3)}</b></span>`;
+}
+
+// ─── TREE DEMO ───────────────────────────────────────
+let treeAnimStep = 0;
+function updateTreeDemo() {
+  document.getElementById('depthVal').textContent = document.getElementById('depthSlider').value;
+  drawTreeViz();
+}
+function drawTreeViz() {
+  const cv = document.getElementById('treeCanvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const depth = +document.getElementById('depthSlider').value;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+  function drawNode(x, y, w, d, maxD) {
+    if (d > maxD) return;
+    const r = Math.max(10, 18 - d*3);
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2);
+    const hue = d/maxD;
+    ctx.fillStyle = `hsl(${270-hue*100},70%,${40+d*10}%)`;
+    ctx.fill(); ctx.strokeStyle = '#7c3aff88'; ctx.lineWidth = 1.5; ctx.stroke();
+    const giniTxt = (0.5 - d*0.08).toFixed(2);
+    ctx.fillStyle = '#fff'; ctx.font = `bold ${Math.max(7,10-d)}px Space Mono`;
+    ctx.textAlign = 'center'; ctx.fillText(giniTxt, x, y+3);
+    if (d < maxD) {
+      const childW = w/2, childY = y+65;
+      [[x-childW/2, childY],[x+childW/2, childY]].forEach(([cx, cy]) => {
+        ctx.beginPath(); ctx.moveTo(x, y+r); ctx.lineTo(cx, cy-r);
+        ctx.strokeStyle = '#7c3aff44'; ctx.lineWidth = 1.5; ctx.stroke();
+        drawNode(cx, cy, childW, d+1, maxD);
+      });
+    }
+  }
+  drawNode(W/2, 30, W*0.9, 0, depth);
+}
+function animateTree() {
+  const maxD = +document.getElementById('depthSlider').value;
+  let d = 0;
+  const interval = setInterval(() => {
+    d++;
+    document.getElementById('depthSlider').value = d;
+    document.getElementById('depthVal').textContent = d;
+    drawTreeViz();
+    if (d >= maxD) clearInterval(interval);
+  }, 600);
+}
+function resetTree() {
+  document.getElementById('depthSlider').value = 1;
+  document.getElementById('depthVal').textContent = 1;
+  drawTreeViz();
+}
+
+// ─── K-MEANS ─────────────────────────────────────────
+let kmeansState = null;
+let kmeansAuto = null;
+function rnd(min,max) { return min + Math.random()*(max-min); }
+function initKMeans() {
+  const k = +document.getElementById('kSlider').value;
+  document.getElementById('kVal').textContent = k;
+  const n = 80;
+  const cols = ['#ff6b35','#00e5ff','#00ff88','#ffd600','#7c3aff','#ff6b9d'];
+  const pts = Array.from({length:n}, () => ({x:rnd(20,520), y:rnd(20,270)}));
+  const centroids = Array.from({length:k}, (_, i) => ({
+    x: rnd(50,500), y: rnd(50,250), c: cols[i]
+  }));
+  kmeansState = {pts, centroids, k, step:0, colors:cols, converged:false};
+  drawKMeans();
+  if (kmeansAuto) { clearInterval(kmeansAuto); kmeansAuto = null; }
+}
+function assignClusters() {
+  kmeansState.pts.forEach(p => {
+    let bestD = Infinity, bestC = 0;
+    kmeansState.centroids.forEach((c,i) => {
+      const d = (p.x-c.x)**2 + (p.y-c.y)**2;
+      if (d < bestD) { bestD = d; bestC = i; }
+    });
+    p.cluster = bestC;
+  });
+}
+function updateCentroids() {
+  const old = kmeansState.centroids.map(c => ({...c}));
+  kmeansState.centroids.forEach((c,i) => {
+    const members = kmeansState.pts.filter(p => p.cluster === i);
+    if (members.length) {
+      c.x = members.reduce((s,p)=>s+p.x,0)/members.length;
+      c.y = members.reduce((s,p)=>s+p.y,0)/members.length;
+    }
+  });
+  const moved = kmeansState.centroids.reduce((s,c,i)=>s+(c.x-old[i].x)**2+(c.y-old[i].y)**2,0);
+  if (moved < 0.5) kmeansState.converged = true;
+}
+function stepKMeans() {
+  if (!kmeansState) initKMeans();
+  if (kmeansState.converged) { document.getElementById('kmeansInfo').textContent = '✓ Converged! K-Means is done.'; return; }
+  kmeansState.step++;
+  assignClusters();
+  if (kmeansState.step > 1) updateCentroids();
+  drawKMeans();
+}
+function autoKMeans() {
+  if (kmeansAuto) { clearInterval(kmeansAuto); kmeansAuto = null; return; }
+  if (!kmeansState) initKMeans();
+  kmeansAuto = setInterval(() => { stepKMeans(); if (kmeansState.converged) { clearInterval(kmeansAuto); kmeansAuto = null; } }, 500);
+}
+function drawKMeans() {
+  const cv = document.getElementById('kmeansCanvas');
+  if (!cv || !kmeansState) return;
+  const ctx = cv.getContext('2d');
+  const {pts, centroids, step} = kmeansState;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = '#020408'; ctx.fillRect(0,0,cv.width,cv.height);
+  pts.forEach(p => {
+    ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+    ctx.fillStyle = p.cluster !== undefined ? kmeansState.colors[p.cluster]+'99' : '#5a6a8a';
+    ctx.fill();
+    if (p.cluster !== undefined) {
+      ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(centroids[p.cluster].x, centroids[p.cluster].y);
+      ctx.strokeStyle = kmeansState.colors[p.cluster]+'20'; ctx.lineWidth=1; ctx.stroke();
+    }
+  });
+  centroids.forEach((c,i) => {
+    ctx.beginPath(); ctx.arc(c.x, c.y, 12, 0, Math.PI*2);
+    ctx.fillStyle = kmeansState.colors[i]; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.fillStyle = '#000'; ctx.font = 'bold 10px Space Mono';
+    ctx.textAlign = 'center'; ctx.fillText(i+1, c.x, c.y+4);
+  });
+  const inertia = pts.reduce((s,p) => {
+    if (p.cluster === undefined) return s;
+    const c = centroids[p.cluster];
+    return s + (p.x-c.x)**2+(p.y-c.y)**2;
+  }, 0);
+  document.getElementById('kmeansInfo').innerHTML =
+    `step: <b style="color:#ff6b35">${step}</b> &nbsp;|&nbsp; inertia: <b style="color:#ff6b35">${Math.round(inertia)}</b>${kmeansState.converged ? ' &nbsp;✓ <b style="color:#00ff88">Converged</b>' : ''}`;
+}
+
+// ─── SVM ─────────────────────────────────────────────
+let svmData = null, svmKernel = 'linear';
+function toggleKernel() {
+  svmKernel = svmKernel === 'linear' ? 'rbf' : 'linear';
+  document.getElementById('kernelBtn').textContent = 'Kernel: ' + (svmKernel === 'linear' ? 'Linear' : 'RBF');
+  updateSVM();
+}
+function updateSVM() {
+  document.getElementById('cVal').textContent = (+document.getElementById('cSlider').value).toFixed(1);
+  const C = +document.getElementById('cSlider').value;
+  const cv = document.getElementById('svmCanvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  if (!svmData) {
+    svmData = {
+      pos: Array.from({length:20}, () => ({x:rnd(50,220), y:rnd(50,220)})),
+      neg: Array.from({length:20}, () => ({x:rnd(300,520), y:rnd(80,250)}))
+    };
+  }
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+  // Simulate decision boundary (simplified visual only)
+  const margin = Math.max(10, 50 - C*3);
+  const midX = W/2 + (Math.random()-0.5)*0.01; // stable
+  // Background regions
+  const grad = ctx.createLinearGradient(0,0,W,0);
+  grad.addColorStop(0, 'rgba(0,229,255,0.06)');
+  grad.addColorStop(0.5, 'rgba(0,255,136,0.03)');
+  grad.addColorStop(1, 'rgba(255,107,53,0.06)');
+  ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+  // Margin region
+  ctx.fillStyle = 'rgba(0,255,136,0.04)';
+  ctx.fillRect(midX - margin, 0, margin*2, H);
+  // Boundary line
+  ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, H);
+  ctx.strokeStyle = '#00ff88'; ctx.lineWidth = 2.5;
+  ctx.shadowColor='#00ff88'; ctx.shadowBlur=12; ctx.stroke(); ctx.shadowBlur=0;
+  // Margin lines
+  ctx.setLineDash([6,4]);
+  ctx.strokeStyle = 'rgba(0,255,136,0.4)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(midX-margin,0); ctx.lineTo(midX-margin,H); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(midX+margin,0); ctx.lineTo(midX+margin,H); ctx.stroke();
+  ctx.setLineDash([]);
+  // Points
+  svmData.pos.forEach(p => {
+    const isSV = Math.abs(p.x - midX) < margin + 20;
+    ctx.beginPath(); ctx.arc(p.x, p.y, isSV?7:5, 0, Math.PI*2);
+    ctx.fillStyle = '#00e5ff'; ctx.fill();
+    if (isSV) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
+  });
+  svmData.neg.forEach(p => {
+    const isSV = Math.abs(p.x - midX) < margin + 20;
+    ctx.beginPath(); ctx.arc(p.x, p.y, isSV?7:5, 0, Math.PI*2);
+    ctx.fillStyle = '#ff6b35'; ctx.fill();
+    if (isSV) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
+  });
+  // Margin label
+  ctx.fillStyle = '#5a6a8a'; ctx.font = '9px Space Mono'; ctx.textAlign = 'center';
+  ctx.fillText(`margin = ${(margin/40).toFixed(2)}`, midX, 15);
+}
+
+// ─── RANDOM FOREST ───────────────────────────────────
+let forestState = null;
+function resetForest() {
+  forestState = {votes: [], growing: false};
+  drawForest();
+}
+function updateForest() {
+  document.getElementById('treeCount').textContent = document.getElementById('treeSlider').value;
+}
+function runForest() {
+  const n = +document.getElementById('treeSlider').value;
+  forestState = {votes: [], growing: true};
+  let i = 0;
+  const interval = setInterval(() => {
+    forestState.votes.push(Math.random() > 0.35 ? 1 : 0); // biased toward benign
+    drawForest();
+    i++;
+    if (i >= n) clearInterval(interval);
+  }, 80);
+}
+function drawForest() {
+  const cv = document.getElementById('forestCanvas');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#020408'; ctx.fillRect(0,0,W,H);
+  const votes = forestState ? forestState.votes : [];
+  const treeW = 10, gap = 2;
+  const maxTrees = 50;
+  votes.forEach((v, i) => {
+    const x = 10 + i*(treeW+gap);
+    const col = v === 1 ? '#00ff88' : '#ff6b35';
+    ctx.fillStyle = col;
+    ctx.fillRect(x, H-60, treeW, 50);
+    ctx.fillStyle = col; ctx.beginPath();
+    ctx.moveTo(x-3, H-60); ctx.lineTo(x+treeW/2, H-90); ctx.lineTo(x+treeW+3, H-60);
+    ctx.fill();
+  });
+  // Vote bar
+  const benign = votes.filter(v=>v===1).length;
+  const total = votes.length;
+  if (total > 0) {
+    const frac = benign / total;
+    ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fillRect(10, 10, W-20, 28);
+    ctx.fillStyle = frac > 0.5 ? '#00ff88' : '#ff6b35';
+    ctx.fillRect(10, 10, (W-20)*frac, 28);
+    ctx.fillStyle = '#000'; ctx.font = 'bold 11px Space Mono'; ctx.textAlign='center';
+    ctx.fillText(`${benign}/${total} votes → ${frac > 0.5 ? 'BENIGN' : 'MALIGNANT'} (${(frac*100).toFixed(0)}%)`, W/2, 29);
+    document.getElementById('forestInfo').innerHTML =
+      `<span>Benign votes: <b style="color:#00ff88">${benign}</b></span> &nbsp;|&nbsp;
+       <span>Malignant votes: <b style="color:#ff6b35">${total-benign}</b></span> &nbsp;|&nbsp;
+       <span>Confidence: <b style="color:${Math.abs(frac-0.5)>0.3?'#00ff88':'#ffd600'}">${(Math.abs(frac-0.5)*200).toFixed(0)}%</b></span>`;
+  } else {
+    ctx.fillStyle = '#5a6a8a'; ctx.font = '12px Space Mono'; ctx.textAlign='center';
+    ctx.fillText('Click "Grow Forest" to start voting', W/2, H/2);
+  }
+}
+</script>
+</body>
+</html>
