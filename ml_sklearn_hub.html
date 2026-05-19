@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ML with Scikit-Learn — Interactive Learning Lab</title>
+<title>ML with Scikit-Learn — Interactive Learning Lab (10 Projects)</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;1,9..40,300&display=swap');
 
@@ -478,7 +478,7 @@ footer {
     <span class="line2">Visual Lab</span>
   </h1>
   <p class="hero-sub">Five deeply interactive, visually animated projects that teach you scikit-learn from the ground up — with live demos, beautiful code walkthroughs, and real-time simulations.</p>
-  <div class="hero-grid">
+  <div class="hero-grid" style="grid-template-columns:repeat(5,1fr);max-width:780px">
     <a href="#proj1" class="project-pill" style="--pill-color:#00e5ff">
       <span class="pill-icon">📈</span>
       <span class="pill-num" style="color:#00e5ff">01</span>
@@ -503,6 +503,31 @@ footer {
       <span class="pill-icon">🌲</span>
       <span class="pill-num" style="color:#ffd600">05</span>
       <span class="pill-label">Random Forest</span>
+    </a>
+    <a href="#proj6" class="project-pill" style="--pill-color:#ff2d9b">
+      <span class="pill-icon">🧬</span>
+      <span class="pill-num" style="color:#ff2d9b">06</span>
+      <span class="pill-label">PCA / Dim Reduction</span>
+    </a>
+    <a href="#proj7" class="project-pill" style="--pill-color:#00cfff">
+      <span class="pill-icon">🏘️</span>
+      <span class="pill-num" style="color:#00cfff">07</span>
+      <span class="pill-label">KNN Classifier</span>
+    </a>
+    <a href="#proj8" class="project-pill" style="--pill-color:#a3ff47">
+      <span class="pill-icon">📉</span>
+      <span class="pill-num" style="color:#a3ff47">08</span>
+      <span class="pill-label">Logistic Regression</span>
+    </a>
+    <a href="#proj9" class="project-pill" style="--pill-color:#ff9500">
+      <span class="pill-icon">⚡</span>
+      <span class="pill-num" style="color:#ff9500">09</span>
+      <span class="pill-label">Gradient Boosting</span>
+    </a>
+    <a href="#proj10" class="project-pill" style="--pill-color:#c084fc">
+      <span class="pill-icon">🔗</span>
+      <span class="pill-num" style="color:#c084fc">10</span>
+      <span class="pill-label">Pipeline & GridSearch</span>
     </a>
   </div>
   <div class="scroll-hint">
@@ -685,6 +710,696 @@ footer {
     </div>
   </div>
 </section>
+
+<!-- ==================== PROJECT 6 ==================== -->
+<section class="section" id="proj6">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 06 — Dimensionality Reduction</div>
+      <div class="section-title" style="color:#ff2d9b">PCA — Principal Component Analysis</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.decomposition</span>
+  </div>
+  <div class="project-block" style="--proj-color:#ff2d9b">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:#ff2d9b">PROJECT // 06</div>
+          <div class="proj-title">Visualizing High-Dimensional Data with PCA</div>
+          <div class="proj-desc">Compress dozens of features into 2D without losing essential structure. Watch eigenvectors rotate through the data cloud, finding axes of maximum variance.</div>
+          <div class="tags">
+            <span class="tag">PCA</span><span class="tag">explained_variance_ratio</span><span class="tag">Scree Plot</span><span class="tag">Biplot</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:#ff2d9b" onclick="openModal('m6')">Open Full Lesson <span class="arrow">→</span></button>
+      </div>
+      <div class="viz-panel"><canvas id="c6" width="440" height="380"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECT 7 ==================== -->
+<section class="section" id="proj7">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 07 — Instance-Based Learning</div>
+      <div class="section-title" style="color:#00cfff">K-Nearest Neighbors</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.neighbors</span>
+  </div>
+  <div class="project-block" style="--proj-color:#00cfff">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:#00cfff">PROJECT // 07</div>
+          <div class="proj-title">Wine Quality Classifier with KNN</div>
+          <div class="proj-desc">See how KNN classifies points by majority vote of their k nearest neighbors. Watch Voronoi boundaries shift live as you adjust k from 1 to 20.</div>
+          <div class="tags">
+            <span class="tag">KNeighborsClassifier</span><span class="tag">Voronoi</span><span class="tag">Euclidean Distance</span><span class="tag">k tuning</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:#00cfff;color:#000" onclick="openModal('m7')">Open Full Lesson <span class="arrow">→</span></button>
+      </div>
+      <div class="viz-panel"><canvas id="c7" width="440" height="380"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECT 8 ==================== -->
+<section class="section" id="proj8">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 08 — Probabilistic Classification</div>
+      <div class="section-title" style="color:#a3ff47">Logistic Regression</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.linear_model</span>
+  </div>
+  <div class="project-block" style="--proj-color:#a3ff47">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:#a3ff47">PROJECT // 08</div>
+          <div class="proj-title">Credit Default Detection with Logistic Regression</div>
+          <div class="proj-desc">Learn how the sigmoid function squashes linear output into probabilities. Animate the S-curve fitting process and explore precision–recall tradeoffs.</div>
+          <div class="tags">
+            <span class="tag">LogisticRegression</span><span class="tag">Sigmoid</span><span class="tag">ROC / AUC</span><span class="tag">Threshold Tuning</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:#a3ff47;color:#000" onclick="openModal('m8')">Open Full Lesson <span class="arrow">→</span></button>
+      </div>
+      <div class="viz-panel"><canvas id="c8" width="440" height="380"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECT 9 ==================== -->
+<section class="section" id="proj9">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 09 — Boosting Ensemble</div>
+      <div class="section-title" style="color:#ff9500">Gradient Boosting</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.ensemble</span>
+  </div>
+  <div class="project-block" style="--proj-color:#ff9500">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:#ff9500">PROJECT // 09</div>
+          <div class="proj-title">Stock Movement Prediction with Gradient Boosting</div>
+          <div class="proj-desc">Watch weak learners combine sequentially, each correcting the residual errors of the last. Understand learning rate, n_estimators, and the bias-variance tradeoff visually.</div>
+          <div class="tags">
+            <span class="tag">GradientBoostingClassifier</span><span class="tag">Residuals</span><span class="tag">learning_rate</span><span class="tag">Stagewise</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:#ff9500;color:#000" onclick="openModal('m9')">Open Full Lesson <span class="arrow">→</span></button>
+      </div>
+      <div class="viz-panel"><canvas id="c9" width="440" height="380"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PROJECT 10 ==================== -->
+<section class="section" id="proj10">
+  <div class="section-header">
+    <div>
+      <div class="section-label">Project 10 — Production Pipelines</div>
+      <div class="section-title" style="color:#c084fc">Pipeline &amp; GridSearchCV</div>
+    </div>
+    <span style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted)">sklearn.pipeline · model_selection</span>
+  </div>
+  <div class="project-block" style="--proj-color:#c084fc">
+    <div class="project-head">
+      <div class="project-info">
+        <div>
+          <div class="proj-num" style="color:#c084fc">PROJECT // 10</div>
+          <div class="proj-title">End-to-End ML Pipeline with Automated Hyperparameter Search</div>
+          <div class="proj-desc">Chain preprocessing, feature selection, and model training into a single reusable object. Visualize the hyperparameter search grid and watch cross-validation scores converge.</div>
+          <div class="tags">
+            <span class="tag">Pipeline</span><span class="tag">GridSearchCV</span><span class="tag">ColumnTransformer</span><span class="tag">cross_val_score</span>
+          </div>
+        </div>
+        <button class="proj-launch" style="background:#c084fc;color:#000" onclick="openModal('m10')">Open Full Lesson <span class="arrow">→</span></button>
+      </div>
+      <div class="viz-panel"><canvas id="c10" width="440" height="380"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODAL 6: PCA ==================== -->
+<div class="modal-overlay" id="m6">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:#ff2d9b;letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 06 // PCA</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Principal Component Analysis</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m6')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:#ff2d9b">
+  <h2>🧬 What is PCA?</h2>
+  <p>PCA finds new axes (principal components) that capture the most variance in your data. It's perfect for visualization, noise reduction, and speeding up downstream models by removing redundant features.</p>
+  <div class="formula">C = (1/n)XᵀX  →  eigen-decompose C  →  PC₁ = direction of max variance</div>
+  <div class="concepts">
+    <div class="concept-card"><div class="concept-icon">↗️</div><div class="concept-title">Eigenvectors</div><div class="concept-desc">The new axes — directions of maximum variance in the original feature space.</div></div>
+    <div class="concept-card"><div class="concept-icon">📊</div><div class="concept-title">Explained Variance</div><div class="concept-desc">How much of the total variance each PC captures. Use a scree plot to find the elbow.</div></div>
+    <div class="concept-card"><div class="concept-icon">🗜️</div><div class="concept-title">Dimensionality Reduction</div><div class="concept-desc">Project 30 features → 2D while retaining most structure. Ideal for visualization.</div></div>
+    <div class="concept-card"><div class="concept-icon">⚠️</div><div class="concept-title">Interpretability Cost</div><div class="concept-desc">PCs are linear combinations of all features — hard to interpret. SHAP is better for explanation.</div></div>
+  </div>
+  <h2>🪜 Pipeline Steps</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">01</div><div class="step-text"><strong>Scale First</strong> — Always StandardScale before PCA. Variance is distance-based; unscaled features dominate.</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-text"><strong>Fit PCA</strong> — pca = PCA(n_components=2); X_2d = pca.fit_transform(X_scaled).</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-text"><strong>Scree Plot</strong> — Plot pca.explained_variance_ratio_ to decide how many components to keep (aim for 90%+).</div></div>
+    <div class="step"><div class="step-num">04</div><div class="step-text"><strong>Visualize</strong> — Scatter plot in 2D space, coloring by class. Clusters indicate separable structure.</div></div>
+    <div class="step"><div class="step-num">05</div><div class="step-text"><strong>Biplot</strong> — Overlay loading vectors to see which original features drive each component.</div></div>
+  </div>
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header"><div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div><span class="code-filename">pca_visualization.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cm"># ═══ PCA — Dimensionality Reduction ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> load_breast_cancer
+<span class="imp">from</span> sklearn.preprocessing <span class="imp">import</span> StandardScaler
+<span class="imp">from</span> sklearn.decomposition <span class="imp">import</span> PCA
+
+<span class="cm"># ── 1. Load (30 features) ─────────────────────────────</span>
+data  = <span class="fn">load_breast_cancer</span>()
+X, y  = data.data, data.target
+names = data.feature_names
+
+<span class="cm"># ── 2. Scale ──────────────────────────────────────────</span>
+X_sc = <span class="cls">StandardScaler</span>().<span class="fn">fit_transform</span>(X)
+
+<span class="cm"># ── 3. Full PCA — scree plot ──────────────────────────</span>
+pca_full = <span class="cls">PCA</span>().<span class="fn">fit</span>(X_sc)
+evr = pca_full.explained_variance_ratio_
+cumulative = np.<span class="fn">cumsum</span>(evr)
+
+fig, (ax1, ax2) = plt.<span class="fn">subplots</span>(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">12</span>, <span class="num">4</span>))
+ax1.<span class="fn">bar</span>(<span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>), evr[:<span class="num">10</span>], color=<span class="str">'#ff2d9b'</span>, alpha=<span class="num">0.8</span>)
+ax1.<span class="fn">set_xlabel</span>(<span class="str">'Component'</span>); ax1.<span class="fn">set_title</span>(<span class="str">'Scree Plot'</span>)
+ax2.<span class="fn">plot</span>(cumulative, <span class="str">'o-'</span>, color=<span class="str">'#ff2d9b'</span>)
+ax2.<span class="fn">axhline</span>(<span class="num">0.9</span>, color=<span class="str">'white'</span>, linestyle=<span class="str">'--'</span>, label=<span class="str">'90% threshold'</span>)
+ax2.<span class="fn">set_xlabel</span>(<span class="str">'# Components'</span>); ax2.<span class="fn">set_title</span>(<span class="str">'Cumulative Variance'</span>)
+ax2.<span class="fn">legend</span>(); plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 4. 2D Projection ──────────────────────────────────</span>
+pca2 = <span class="cls">PCA</span>(n_components=<span class="num">2</span>)
+X_2d = pca2.<span class="fn">fit_transform</span>(X_sc)
+<span class="fn">print</span>(<span class="str">f"Variance explained: {pca2.explained_variance_ratio_.sum():.1%}"</span>)
+
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>, <span class="num">6</span>))
+<span class="kw">for</span> cls, lbl, col <span class="kw">in</span> [(<span class="num">0</span>,<span class="str">'Malignant'</span>,<span class="str">'#ff6b35'</span>),(<span class="num">1</span>,<span class="str">'Benign'</span>,<span class="str">'#00e5ff'</span>)]:
+    mask = y == cls
+    plt.<span class="fn">scatter</span>(X_2d[mask,<span class="num">0</span>], X_2d[mask,<span class="num">1</span>], alpha=<span class="num">0.7</span>,
+                color=col, label=lbl, edgecolors=<span class="str">'k'</span>, linewidths=<span class="num">0.4</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">f'PC1 ({evr[0]:.1%} var)'</span>)
+plt.<span class="fn">ylabel</span>(<span class="str">f'PC2 ({evr[1]:.1%} var)'</span>)
+plt.<span class="fn">title</span>(<span class="str">'Breast Cancer — PCA 2D Projection'</span>)
+plt.<span class="fn">legend</span>(); plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 5. Biplot — loading vectors ───────────────────────</span>
+components = pca2.components_
+fig, ax = plt.<span class="fn">subplots</span>(figsize=(<span class="num">9</span>, <span class="num">7</span>))
+ax.<span class="fn">scatter</span>(X_2d[:,<span class="num">0</span>], X_2d[:,<span class="num">1</span>], c=y, cmap=<span class="str">'coolwarm'</span>,
+           alpha=<span class="num">0.4</span>, s=<span class="num">20</span>)
+scale = <span class="num">3</span>
+<span class="kw">for</span> i, name <span class="kw">in</span> <span class="fn">enumerate</span>(names):
+    ax.<span class="fn">annotate</span>(<span class="str">''</span>, xy=(components[<span class="num">0</span>,i]*scale, components[<span class="num">1</span>,i]*scale),
+                xytext=(<span class="num">0</span>,<span class="num">0</span>),
+                arrowprops=<span class="fn">dict</span>(arrowstyle=<span class="str">'->'</span>, color=<span class="str">'#ff2d9b'</span>, lw=<span class="num">1.5</span>))
+    ax.<span class="fn">text</span>(components[<span class="num">0</span>,i]*scale*<span class="num">1.1</span>, components[<span class="num">1</span>,i]*scale*<span class="num">1.1</span>,
+            name, fontsize=<span class="num">7</span>, color=<span class="str">'#ff2d9b'</span>)
+ax.<span class="fn">set_title</span>(<span class="str">'PCA Biplot'</span>); plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()</pre>
+  </div>
+  <h2>🎮 PCA Variance Explorer</h2>
+  <div class="demo-container">
+    <div class="demo-title">Simulated 3D data projected onto top 2 principal components</div>
+    <div class="demo-controls">
+      <div class="demo-slider"><label>Rotation angle: <span id="pcaAngleVal">0°</span></label><input type="range" id="pcaAngle" min="0" max="360" step="1" value="0" oninput="drawPCA()"></div>
+      <div class="demo-slider"><label>Noise: <span id="pcaNoiseVal">0.3</span></label><input type="range" id="pcaNoise" min="0.05" max="1.5" step="0.05" value="0.3" oninput="pcaCloud=null;drawPCA()"></div>
+      <button class="demo-btn primary" onclick="animatePCA()">▶ Auto Rotate</button>
+    </div>
+    <canvas id="pcaCanvas" width="560" height="280"></canvas>
+    <div id="pcaStats" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:0.5rem"></div>
+  </div>
+</div></div></div>
+
+<!-- ==================== MODAL 7: KNN ==================== -->
+<div class="modal-overlay" id="m7">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:#00cfff;letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 07 // K-NEAREST NEIGHBORS</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Wine Quality Classifier</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m7')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:#00cfff">
+  <h2>🏘️ How KNN Works</h2>
+  <p>KNN is a lazy learner — it memorizes training data and classifies new points by majority vote among their k nearest neighbors. No explicit training phase; prediction time is O(n).</p>
+  <div class="formula">class(x) = mode{ y(x₁), y(x₂), ..., y(xₖ) }  where d(x, xᵢ) = ||x − xᵢ||₂</div>
+  <div class="concepts">
+    <div class="concept-card"><div class="concept-icon">📏</div><div class="concept-title">Distance Metrics</div><div class="concept-desc">Euclidean (L2), Manhattan (L1), Minkowski. Must scale features first or large-range features dominate.</div></div>
+    <div class="concept-card"><div class="concept-icon">🔢</div><div class="concept-title">Choosing k</div><div class="concept-desc">k=1 overfits, k=n underfits. Use cross-validation. Odd k avoids ties. √n is a common heuristic.</div></div>
+    <div class="concept-card"><div class="concept-icon">🐢</div><div class="concept-title">Scalability</div><div class="concept-desc">KNN is slow at prediction for large datasets. Use KD-Tree or Ball Tree (algorithm='kd_tree') for speedup.</div></div>
+    <div class="concept-card"><div class="concept-icon">⚖️</div><div class="concept-title">Weighted KNN</div><div class="concept-desc">weights='distance' gives closer neighbors more influence — often improves accuracy on noisy data.</div></div>
+  </div>
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header"><div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div><span class="code-filename">wine_knn.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cm"># ═══ Wine Quality Classifier with KNN ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> load_wine
+<span class="imp">from</span> sklearn.neighbors <span class="imp">import</span> KNeighborsClassifier
+<span class="imp">from</span> sklearn.model_selection <span class="imp">import</span> train_test_split, cross_val_score
+<span class="imp">from</span> sklearn.preprocessing <span class="imp">import</span> StandardScaler
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> classification_report, ConfusionMatrixDisplay
+
+<span class="cm"># ── 1. Load Wine Dataset ──────────────────────────────</span>
+wine = <span class="fn">load_wine</span>()
+X, y = wine.data, wine.target
+<span class="fn">print</span>(<span class="str">f"Shape: {X.shape} | Classes: {wine.target_names}"</span>)
+
+<span class="cm"># ── 2. Scale + Split ──────────────────────────────────</span>
+scaler = <span class="cls">StandardScaler</span>()
+X_sc = scaler.<span class="fn">fit_transform</span>(X)
+X_tr, X_te, y_tr, y_te = <span class="fn">train_test_split</span>(
+    X_sc, y, test_size=<span class="num">0.25</span>, random_state=<span class="num">42</span>, stratify=y
+)
+
+<span class="cm"># ── 3. Find Best k via Cross-Validation ───────────────</span>
+k_range = <span class="fn">range</span>(<span class="num">1</span>, <span class="num">31</span>)
+cv_scores = [
+    <span class="fn">cross_val_score</span>(
+        <span class="cls">KNeighborsClassifier</span>(n_neighbors=k),
+        X_sc, y, cv=<span class="num">10</span>
+    ).<span class="fn">mean</span>() <span class="kw">for</span> k <span class="kw">in</span> k_range
+]
+best_k = k_range[np.<span class="fn">argmax</span>(cv_scores)]
+<span class="fn">print</span>(<span class="str">f"Best k = {best_k}, CV acc = {max(cv_scores):.4f}"</span>)
+
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>, <span class="num">4</span>))
+plt.<span class="fn">plot</span>(k_range, cv_scores, <span class="str">'o-'</span>, color=<span class="str">'#00cfff'</span>)
+plt.<span class="fn">axvline</span>(best_k, color=<span class="str">'red'</span>, linestyle=<span class="str">'--'</span>, label=<span class="str">f'Best k={best_k}'</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">'k'</span>); plt.<span class="fn">ylabel</span>(<span class="str">'CV Accuracy'</span>)
+plt.<span class="fn">title</span>(<span class="str">'KNN — Accuracy vs. k'</span>); plt.<span class="fn">legend</span>()
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 4. Train Final Model ──────────────────────────────</span>
+knn = <span class="cls">KNeighborsClassifier</span>(
+    n_neighbors=best_k,
+    weights=<span class="str">'distance'</span>,   <span class="cm"># closer = more weight</span>
+    algorithm=<span class="str">'kd_tree'</span>,   <span class="cm"># fast lookup</span>
+    metric=<span class="str">'euclidean'</span>
+)
+knn.<span class="fn">fit</span>(X_tr, y_tr)
+
+<span class="cm"># ── 5. Evaluate ───────────────────────────────────────</span>
+y_pred = knn.<span class="fn">predict</span>(X_te)
+<span class="fn">print</span>(<span class="fn">classification_report</span>(y_te, y_pred, target_names=wine.target_names))
+
+<span class="cm"># ── 6. Confusion Matrix ───────────────────────────────</span>
+<span class="cls">ConfusionMatrixDisplay</span>.<span class="fn">from_estimator</span>(
+    knn, X_te, y_te, display_labels=wine.target_names, cmap=<span class="str">'Blues'</span>
+)
+plt.<span class="fn">title</span>(<span class="str">f'KNN (k={best_k}) Confusion Matrix'</span>)
+plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 7. Decision Boundary (2 PCA dims) ────────────────</span>
+<span class="imp">from</span> sklearn.decomposition <span class="imp">import</span> PCA
+X_2d = <span class="cls">PCA</span>(n_components=<span class="num">2</span>).<span class="fn">fit_transform</span>(X_sc)
+knn2d = <span class="cls">KNeighborsClassifier</span>(n_neighbors=best_k).<span class="fn">fit</span>(X_2d, y)
+xx, yy = np.<span class="fn">meshgrid</span>(np.<span class="fn">linspace</span>(-<span class="num">4</span>,<span class="num">4</span>,<span class="num">300</span>), np.<span class="fn">linspace</span>(-<span class="num">4</span>,<span class="num">4</span>,<span class="num">300</span>))
+Z = knn2d.<span class="fn">predict</span>(np.c_[xx.<span class="fn">ravel</span>(),yy.<span class="fn">ravel</span>()]).<span class="fn">reshape</span>(xx.shape)
+plt.<span class="fn">contourf</span>(xx,yy,Z,alpha=<span class="num">0.25</span>,cmap=<span class="str">'Set1'</span>)
+plt.<span class="fn">scatter</span>(X_2d[:,<span class="num">0</span>],X_2d[:,<span class="num">1</span>],c=y,cmap=<span class="str">'Set1'</span>,edgecolors=<span class="str">'k'</span>,s=<span class="num">40</span>)
+plt.<span class="fn">title</span>(<span class="str">f'KNN Decision Boundary (k={best_k}, PCA 2D)'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()</pre>
+  </div>
+  <h2>🎮 KNN Live Boundary</h2>
+  <div class="demo-container">
+    <div class="demo-title">Click canvas to add a new point — watch KNN classify it by majority vote</div>
+    <div class="demo-controls">
+      <div class="demo-slider"><label>k neighbors: <span id="knnK">5</span></label><input type="range" id="knnKSlider" min="1" max="15" step="1" value="5" oninput="document.getElementById('knnK').textContent=this.value;drawKNN()"></div>
+      <button class="demo-btn" onclick="knnClass=0" style="border-color:#00cfff;color:#00cfff">● Class A</button>
+      <button class="demo-btn" onclick="knnClass=1" style="border-color:#ff6b35;color:#ff6b35">● Class B</button>
+      <button class="demo-btn primary" onclick="knnPts=[];knnQuery=null;drawKNN()">↺ Clear</button>
+    </div>
+    <canvas id="knnCanvas" width="560" height="280" style="cursor:crosshair" onclick="knnClick(event)"></canvas>
+    <div id="knnInfo" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:0.5rem">Click to add training points, then right-click to classify a query point</div>
+  </div>
+</div></div></div>
+
+<!-- ==================== MODAL 8: Logistic Regression ==================== -->
+<div class="modal-overlay" id="m8">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:#a3ff47;letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 08 // LOGISTIC REGRESSION</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Credit Default Detector</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m8')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:#a3ff47">
+  <h2>📉 Logistic Regression — Not Actually Regression</h2>
+  <p>Despite its name, logistic regression is a classification algorithm. It applies the sigmoid function to a linear combination of features to output a probability between 0 and 1.</p>
+  <div class="formula">σ(z) = 1 / (1 + e⁻ᶻ)  where z = β₀ + β₁x₁ + ... + βₙxₙ  →  P(y=1|x) = σ(z)</div>
+  <div class="concepts">
+    <div class="concept-card"><div class="concept-icon">📈</div><div class="concept-title">Sigmoid Function</div><div class="concept-desc">Maps any real number to (0,1). The S-curve is the hallmark of logistic regression output.</div></div>
+    <div class="concept-card"><div class="concept-icon">🎚️</div><div class="concept-title">Decision Threshold</div><div class="concept-desc">Default 0.5, but tunable. Lower for high-recall (catching all fraud), raise for high-precision.</div></div>
+    <div class="concept-card"><div class="concept-icon">🔒</div><div class="concept-title">Regularization</div><div class="concept-desc">C=1/λ controls penalty. Small C = strong regularization. penalty='l1' for sparsity, 'l2' default.</div></div>
+    <div class="concept-card"><div class="concept-icon">📐</div><div class="concept-title">Log-Loss</div><div class="concept-desc">Cross-entropy loss penalizes confident wrong predictions heavily. Optimized via gradient descent.</div></div>
+  </div>
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header"><div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div><span class="code-filename">credit_default_logistic.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cm"># ═══ Credit Default Detector — Logistic Regression ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> make_classification
+<span class="imp">from</span> sklearn.linear_model <span class="imp">import</span> LogisticRegression
+<span class="imp">from</span> sklearn.model_selection <span class="imp">import</span> train_test_split
+<span class="imp">from</span> sklearn.preprocessing <span class="imp">import</span> StandardScaler
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> (classification_report,
+    RocCurveDisplay, PrecisionRecallDisplay, log_loss)
+
+<span class="cm"># ── 1. Simulated Credit Dataset ───────────────────────</span>
+X, y = <span class="fn">make_classification</span>(
+    n_samples=<span class="num">2000</span>, n_features=<span class="num">15</span>, n_informative=<span class="num">8</span>,
+    weights=[<span class="num">0.85</span>, <span class="num">0.15</span>],  <span class="cm"># imbalanced: 15% default</span>
+    random_state=<span class="num">42</span>
+)
+
+<span class="cm"># ── 2. Scale + Split ──────────────────────────────────</span>
+X_sc = <span class="cls">StandardScaler</span>().<span class="fn">fit_transform</span>(X)
+X_tr, X_te, y_tr, y_te = <span class="fn">train_test_split</span>(
+    X_sc, y, test_size=<span class="num">0.2</span>, stratify=y, random_state=<span class="num">42</span>
+)
+
+<span class="cm"># ── 3. Train Model ────────────────────────────────────</span>
+model = <span class="cls">LogisticRegression</span>(
+    C=<span class="num">1.0</span>,           <span class="cm"># regularisation strength</span>
+    penalty=<span class="str">'l2'</span>,    <span class="cm"># ridge penalty</span>
+    solver=<span class="str">'lbfgs'</span>,  <span class="cm"># good for small-medium datasets</span>
+    max_iter=<span class="num">1000</span>,
+    class_weight=<span class="str">'balanced'</span>  <span class="cm"># handle imbalance</span>
+)
+model.<span class="fn">fit</span>(X_tr, y_tr)
+probs = model.<span class="fn">predict_proba</span>(X_te)[:, <span class="num">1</span>]
+<span class="fn">print</span>(<span class="str">f"Log-Loss: {log_loss(y_te, probs):.4f}"</span>)
+
+<span class="cm"># ── 4. Threshold Tuning ───────────────────────────────</span>
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> precision_score, recall_score, f1_score
+thresholds = np.<span class="fn">arange</span>(<span class="num">0.1</span>, <span class="num">0.9</span>, <span class="num">0.05</span>)
+f1s = [<span class="fn">f1_score</span>(y_te, probs >= t) <span class="kw">for</span> t <span class="kw">in</span> thresholds]
+best_thresh = thresholds[np.<span class="fn">argmax</span>(f1s)]
+<span class="fn">print</span>(<span class="str">f"Best threshold: {best_thresh:.2f}  F1={max(f1s):.4f}"</span>)
+
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>, <span class="num">4</span>))
+plt.<span class="fn">plot</span>(thresholds, f1s, color=<span class="str">'#a3ff47'</span>)
+plt.<span class="fn">axvline</span>(best_thresh, color=<span class="str">'red'</span>, linestyle=<span class="str">'--'</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">'Threshold'</span>); plt.<span class="fn">ylabel</span>(<span class="str">'F1 Score'</span>)
+plt.<span class="fn">title</span>(<span class="str">'F1 Score vs Classification Threshold'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 5. Final Predictions ──────────────────────────────</span>
+y_pred = (probs >= best_thresh).<span class="fn">astype</span>(<span class="num">int</span>)
+<span class="fn">print</span>(<span class="fn">classification_report</span>(y_te, y_pred,
+      target_names=[<span class="str">'No Default'</span>, <span class="str">'Default'</span>]))
+
+<span class="cm"># ── 6. ROC + PR Curves ───────────────────────────────</span>
+fig, (ax1, ax2) = plt.<span class="fn">subplots</span>(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">12</span>, <span class="num">5</span>))
+<span class="cls">RocCurveDisplay</span>.<span class="fn">from_estimator</span>(model, X_te, y_te, ax=ax1)
+<span class="cls">PrecisionRecallDisplay</span>.<span class="fn">from_estimator</span>(model, X_te, y_te, ax=ax2)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 7. Sigmoid visualization ──────────────────────────</span>
+z = np.<span class="fn">linspace</span>(-<span class="num">6</span>, <span class="num">6</span>, <span class="num">300</span>)
+sigma = <span class="num">1</span> / (<span class="num">1</span> + np.<span class="fn">exp</span>(-z))
+plt.<span class="fn">figure</span>(figsize=(<span class="num">7</span>, <span class="num">4</span>))
+plt.<span class="fn">plot</span>(z, sigma, color=<span class="str">'#a3ff47'</span>, lw=<span class="num">2.5</span>)
+plt.<span class="fn">axhline</span>(<span class="num">0.5</span>, color=<span class="str">'white'</span>, linestyle=<span class="str">'--'</span>, alpha=<span class="num">0.5</span>)
+plt.<span class="fn">axvline</span>(<span class="num">0</span>,   color=<span class="str">'white'</span>, linestyle=<span class="str">'--'</span>, alpha=<span class="num">0.5</span>)
+plt.<span class="fn">title</span>(<span class="str">'The Sigmoid Function σ(z)'</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">'z (linear combination)'</span>)
+plt.<span class="fn">ylabel</span>(<span class="str">'P(y=1)'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()</pre>
+  </div>
+  <h2>🎮 Sigmoid Live Explorer</h2>
+  <div class="demo-container">
+    <div class="demo-title">Adjust the decision threshold and watch precision vs recall trade off</div>
+    <div class="demo-controls">
+      <div class="demo-slider"><label>Threshold: <span id="threshVal">0.50</span></label><input type="range" id="threshSlider" min="0.05" max="0.95" step="0.01" value="0.50" oninput="drawLogistic()"></div>
+      <button class="demo-btn primary" onclick="logData=null;drawLogistic()">🔀 New Data</button>
+    </div>
+    <canvas id="logCanvas" width="560" height="280"></canvas>
+    <div id="logStats" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:0.5rem;display:flex;gap:2rem"></div>
+  </div>
+</div></div></div>
+
+<!-- ==================== MODAL 9: Gradient Boosting ==================== -->
+<div class="modal-overlay" id="m9">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:#ff9500;letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 09 // GRADIENT BOOSTING</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Stock Movement Predictor</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m9')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:#ff9500">
+  <h2>⚡ Gradient Boosting — Sequential Ensemble</h2>
+  <p>Unlike Random Forest (parallel trees), Gradient Boosting trains trees sequentially. Each new tree fits the <strong style="color:var(--text)">residual errors</strong> of the previous ensemble — gradient descent in function space.</p>
+  <div class="formula">F_m(x) = F_{m-1}(x) + η · h_m(x)  where h_m fits the negative gradient of the loss</div>
+  <div class="concepts">
+    <div class="concept-card"><div class="concept-icon">📉</div><div class="concept-title">Residuals</div><div class="concept-desc">Each tree targets the errors left by all previous trees. Errors shrink with every round.</div></div>
+    <div class="concept-card"><div class="concept-icon">🎓</div><div class="concept-title">Learning Rate η</div><div class="concept-desc">Shrinks each tree's contribution. Smaller η → more trees needed but better generalization.</div></div>
+    <div class="concept-card"><div class="concept-icon">🌿</div><div class="concept-title">Shallow Trees</div><div class="concept-desc">max_depth=3–5 is typical. Deep trees overfit residuals. Shallow trees = high bias, corrected by boosting.</div></div>
+    <div class="concept-card"><div class="concept-icon">🏆</div><div class="concept-title">vs XGBoost</div><div class="concept-desc">sklearn's GBM is solid. XGBoost/LightGBM add regularization, parallel training, and GPU support.</div></div>
+  </div>
+  <h2>🪜 Pipeline Steps</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">01</div><div class="step-text"><strong>Start</strong> — Initialize F₀(x) with the mean of target values (for regression) or log-odds (classification).</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-text"><strong>Compute residuals</strong> — rᵢ = yᵢ − F(xᵢ). These become the new target for the next tree.</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-text"><strong>Fit weak learner</strong> — Train a shallow decision tree on the residuals.</div></div>
+    <div class="step"><div class="step-num">04</div><div class="step-text"><strong>Update ensemble</strong> — F_m = F_{m-1} + η·h_m. Repeat for n_estimators rounds.</div></div>
+    <div class="step"><div class="step-num">05</div><div class="step-text"><strong>Tune</strong> — Use early stopping with n_iter_no_change=10 to avoid overfitting automatically.</div></div>
+  </div>
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header"><div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div><span class="code-filename">stock_gradient_boosting.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cm"># ═══ Stock Movement Prediction — Gradient Boosting ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.ensemble <span class="imp">import</span> GradientBoostingClassifier
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> make_classification
+<span class="imp">from</span> sklearn.model_selection <span class="imp">import</span> train_test_split
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> classification_report, roc_auc_score
+<span class="imp">from</span> sklearn.inspection <span class="imp">import</span> PartialDependenceDisplay
+
+<span class="cm"># ── 1. Synthetic Stock Features ───────────────────────</span>
+X, y = <span class="fn">make_classification</span>(
+    n_samples=<span class="num">3000</span>, n_features=<span class="num">20</span>, n_informative=<span class="num">12</span>,
+    random_state=<span class="num">42</span>
+)
+X_tr, X_te, y_tr, y_te = <span class="fn">train_test_split</span>(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>
+)
+
+<span class="cm"># ── 2. Train GBM ──────────────────────────────────────</span>
+gbm = <span class="cls">GradientBoostingClassifier</span>(
+    n_estimators=<span class="num">300</span>,
+    learning_rate=<span class="num">0.05</span>,  <span class="cm"># small LR → needs more trees</span>
+    max_depth=<span class="num">4</span>,
+    min_samples_leaf=<span class="num">10</span>,
+    subsample=<span class="num">0.8</span>,         <span class="cm"># stochastic GBM</span>
+    n_iter_no_change=<span class="num">20</span>,   <span class="cm"># early stopping</span>
+    validation_fraction=<span class="num">0.1</span>,
+    random_state=<span class="num">42</span>,
+    verbose=<span class="num">0</span>
+)
+gbm.<span class="fn">fit</span>(X_tr, y_tr)
+<span class="fn">print</span>(<span class="str">f"Trees used: {gbm.n_estimators_}"</span>)
+
+<span class="cm"># ── 3. Evaluate ───────────────────────────────────────</span>
+y_pred = gbm.<span class="fn">predict</span>(X_te)
+y_prob = gbm.<span class="fn">predict_proba</span>(X_te)[:,<span class="num">1</span>]
+<span class="fn">print</span>(<span class="fn">classification_report</span>(y_te, y_pred))
+<span class="fn">print</span>(<span class="str">f"AUC: {roc_auc_score(y_te, y_prob):.4f}"</span>)
+
+<span class="cm"># ── 4. Training Deviance Curve ────────────────────────</span>
+train_score = gbm.train_score_
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>, <span class="num">4</span>))
+plt.<span class="fn">plot</span>(train_score, color=<span class="str">'#ff9500'</span>, label=<span class="str">'Train loss'</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">'Boosting Rounds'</span>); plt.<span class="fn">ylabel</span>(<span class="str">'Log Loss'</span>)
+plt.<span class="fn">title</span>(<span class="str">'GBM Learning Curve'</span>); plt.<span class="fn">legend</span>()
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 5. Feature Importance ─────────────────────────────</span>
+<span class="imp">import</span> pandas <span class="kw">as</span> pd
+fi = pd.<span class="fn">Series</span>(gbm.feature_importances_).<span class="fn">sort_values</span>(ascending=<span class="num">False</span>)[:<span class="num">10</span>]
+fi.<span class="fn">plot</span>.<span class="fn">barh</span>(color=<span class="str">'#ff9500'</span>)
+plt.<span class="fn">title</span>(<span class="str">'GBM Feature Importance'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 6. Partial Dependence Plot ────────────────────────</span>
+<span class="cls">PartialDependenceDisplay</span>.<span class="fn">from_estimator</span>(
+    gbm, X_tr, features=[<span class="num">0</span>, <span class="num">1</span>, (<span class="num">0</span>,<span class="num">1</span>)],
+    kind=<span class="str">'both'</span>
+)
+plt.<span class="fn">suptitle</span>(<span class="str">'Partial Dependence Plots'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()</pre>
+  </div>
+  <h2>🎮 Boosting Rounds Visualizer</h2>
+  <div class="demo-container">
+    <div class="demo-title">Watch the ensemble error shrink as more weak learners are added</div>
+    <div class="demo-controls">
+      <div class="demo-slider"><label>Learning Rate η: <span id="lrVal">0.30</span></label><input type="range" id="lrSlider" min="0.05" max="1.0" step="0.05" value="0.3" oninput="resetBoost()"></div>
+      <button class="demo-btn primary" onclick="autoBoost()">▶ Run Boosting</button>
+      <button class="demo-btn" onclick="resetBoost()">↺ Reset</button>
+    </div>
+    <canvas id="boostCanvas" width="560" height="280"></canvas>
+    <div id="boostInfo" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:0.5rem"></div>
+  </div>
+</div></div></div>
+
+<!-- ==================== MODAL 10: Pipeline ==================== -->
+<div class="modal-overlay" id="m10">
+<div class="modal">
+<div class="modal-header">
+  <div>
+    <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:#c084fc;letter-spacing:0.1em;margin-bottom:0.3rem">PROJECT 10 // PIPELINE & GRIDSEARCHCV</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">End-to-End ML Pipeline</div>
+  </div>
+  <button class="modal-close" onclick="closeModal('m10')">✕</button>
+</div>
+<div class="modal-body" style="--proj-color:#c084fc">
+  <h2>🔗 Why Pipelines?</h2>
+  <p>A Pipeline chains preprocessing and modeling into one object, preventing data leakage and making deployment trivial. You fit once, predict anywhere — scaler, imputer, and model travel together.</p>
+  <div class="formula">Pipeline: [('imputer', SimpleImputer) → ('scaler', StandardScaler) → ('model', SVC)]</div>
+  <div class="concepts">
+    <div class="concept-card"><div class="concept-icon">🚰</div><div class="concept-title">Data Leakage Prevention</div><div class="concept-desc">Fitting the scaler on all data before splitting leaks test statistics. Pipeline ensures fit happens only on train fold.</div></div>
+    <div class="concept-card"><div class="concept-icon">🔍</div><div class="concept-title">GridSearchCV</div><div class="concept-desc">Exhaustive search over a param grid with cross-validation. Use __ notation: 'model__C' to tune pipeline params.</div></div>
+    <div class="concept-card"><div class="concept-icon">🎲</div><div class="concept-title">RandomizedSearchCV</div><div class="concept-desc">Samples n_iter random combos from param distributions. Much faster than Grid when param space is large.</div></div>
+    <div class="concept-card"><div class="concept-icon">📦</div><div class="concept-title">ColumnTransformer</div><div class="concept-desc">Apply different preprocessing to numeric vs categorical columns simultaneously in a single clean step.</div></div>
+  </div>
+  <h2>🪜 Pipeline Steps</h2>
+  <div class="steps">
+    <div class="step"><div class="step-num">01</div><div class="step-text"><strong>ColumnTransformer</strong> — Impute + scale numerics; impute + one-hot encode categoricals in one step.</div></div>
+    <div class="step"><div class="step-num">02</div><div class="step-text"><strong>Build Pipeline</strong> — Chain preprocessor + model. Access any step by name with pipeline['step_name'].</div></div>
+    <div class="step"><div class="step-num">03</div><div class="step-text"><strong>Define param_grid</strong> — Use double-underscore: {'model__C': [0.1,1,10], 'model__kernel': ['rbf','linear']}.</div></div>
+    <div class="step"><div class="step-num">04</div><div class="step-text"><strong>GridSearchCV</strong> — cv=5, scoring='f1'. Access best_params_, best_score_, best_estimator_.</div></div>
+    <div class="step"><div class="step-num">05</div><div class="step-text"><strong>Deploy</strong> — Serialize with joblib.dump(best_pipeline, 'model.pkl'). One file contains everything.</div></div>
+  </div>
+  <h2>💻 Complete Code</h2>
+  <div class="code-block">
+    <div class="code-header"><div class="code-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div><span class="code-filename">full_pipeline.py</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre><span class="cm"># ═══ End-to-End ML Pipeline with GridSearchCV ═══</span>
+<span class="imp">import</span> numpy <span class="kw">as</span> np
+<span class="imp">import</span> pandas <span class="kw">as</span> pd
+<span class="imp">import</span> joblib
+<span class="imp">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="imp">from</span> sklearn.pipeline <span class="imp">import</span> Pipeline
+<span class="imp">from</span> sklearn.compose <span class="imp">import</span> ColumnTransformer
+<span class="imp">from</span> sklearn.impute <span class="imp">import</span> SimpleImputer
+<span class="imp">from</span> sklearn.preprocessing <span class="imp">import</span> StandardScaler, OneHotEncoder
+<span class="imp">from</span> sklearn.feature_selection <span class="imp">import</span> SelectKBest, f_classif
+<span class="imp">from</span> sklearn.svm <span class="imp">import</span> SVC
+<span class="imp">from</span> sklearn.model_selection <span class="imp">import</span> (GridSearchCV,
+    train_test_split, cross_val_score)
+<span class="imp">from</span> sklearn.datasets <span class="imp">import</span> fetch_openml
+<span class="imp">from</span> sklearn.metrics <span class="imp">import</span> classification_report
+
+<span class="cm"># ── 1. Load Titanic Dataset ───────────────────────────</span>
+titanic = <span class="fn">fetch_openml</span>(<span class="str">'titanic'</span>, version=<span class="num">1</span>, as_frame=<span class="num">True</span>)
+df = titanic.frame
+df[<span class="str">'survived'</span>] = df[<span class="str">'survived'</span>].<span class="fn">astype</span>(<span class="num">int</span>)
+
+<span class="cm"># ── 2. Feature Selection ──────────────────────────────</span>
+num_feats = [<span class="str">'age'</span>, <span class="str">'fare'</span>, <span class="str">'pclass'</span>, <span class="str">'sibsp'</span>, <span class="str">'parch'</span>]
+cat_feats = [<span class="str">'sex'</span>, <span class="str">'embarked'</span>]
+X = df[num_feats + cat_feats]
+y = df[<span class="str">'survived'</span>]
+
+X_tr, X_te, y_tr, y_te = <span class="fn">train_test_split</span>(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>, stratify=y
+)
+
+<span class="cm"># ── 3. ColumnTransformer ──────────────────────────────</span>
+num_pipe = <span class="cls">Pipeline</span>([
+    (<span class="str">'imputer'</span>, <span class="cls">SimpleImputer</span>(strategy=<span class="str">'median'</span>)),
+    (<span class="str">'scaler'</span> , <span class="cls">StandardScaler</span>())
+])
+cat_pipe = <span class="cls">Pipeline</span>([
+    (<span class="str">'imputer'</span>, <span class="cls">SimpleImputer</span>(strategy=<span class="str">'most_frequent'</span>)),
+    (<span class="str">'ohe'</span>    , <span class="cls">OneHotEncoder</span>(handle_unknown=<span class="str">'ignore'</span>))
+])
+preprocessor = <span class="cls">ColumnTransformer</span>([
+    (<span class="str">'num'</span>, num_pipe, num_feats),
+    (<span class="str">'cat'</span>, cat_pipe, cat_feats),
+])
+
+<span class="cm"># ── 4. Full Pipeline ──────────────────────────────────</span>
+full_pipe = <span class="cls">Pipeline</span>([
+    (<span class="str">'preprocessor'</span>, preprocessor),
+    (<span class="str">'selector'</span>    , <span class="cls">SelectKBest</span>(<span class="fn">f_classif</span>)),
+    (<span class="str">'model'</span>       , <span class="cls">SVC</span>(probability=<span class="num">True</span>)),
+])
+
+<span class="cm"># ── 5. Grid Search ────────────────────────────────────</span>
+param_grid = {
+    <span class="str">'selector__k'</span>   : [<span class="num">5</span>, <span class="num">7</span>, <span class="str">'all'</span>],
+    <span class="str">'model__C'</span>      : [<span class="num">0.1</span>, <span class="num">1</span>, <span class="num">10</span>],
+    <span class="str">'model__kernel'</span> : [<span class="str">'rbf'</span>, <span class="str">'linear'</span>],
+}
+gs = <span class="cls">GridSearchCV</span>(
+    full_pipe, param_grid,
+    cv=<span class="num">5</span>, scoring=<span class="str">'roc_auc'</span>, n_jobs=-<span class="num">1</span>, verbose=<span class="num">1</span>
+)
+gs.<span class="fn">fit</span>(X_tr, y_tr)
+<span class="fn">print</span>(<span class="str">f"Best params : {gs.best_params_}"</span>)
+<span class="fn">print</span>(<span class="str">f"Best CV AUC : {gs.best_score_:.4f}"</span>)
+
+<span class="cm"># ── 6. Evaluate Best Pipeline ─────────────────────────</span>
+best = gs.best_estimator_
+y_pred = best.<span class="fn">predict</span>(X_te)
+<span class="fn">print</span>(<span class="fn">classification_report</span>(y_te, y_pred,
+      target_names=[<span class="str">'Died'</span>, <span class="str">'Survived'</span>]))
+
+<span class="cm"># ── 7. Visualize Grid Search Heatmap ─────────────────</span>
+results = pd.<span class="fn">DataFrame</span>(gs.cv_results_)
+pivot = results.<span class="fn">pivot_table</span>(
+    values=<span class="str">'mean_test_score'</span>,
+    index=<span class="str">'param_model__C'</span>,
+    columns=<span class="str">'param_model__kernel'</span>
+)
+plt.<span class="fn">figure</span>(figsize=(<span class="num">6</span>, <span class="num">4</span>))
+plt.<span class="fn">imshow</span>(pivot, cmap=<span class="str">'plasma'</span>, aspect=<span class="str">'auto'</span>)
+plt.<span class="fn">colorbar</span>(label=<span class="str">'Mean CV AUC'</span>)
+plt.<span class="fn">xticks</span>(<span class="fn">range</span>(<span class="fn">len</span>(pivot.columns)), pivot.columns)
+plt.<span class="fn">yticks</span>(<span class="fn">range</span>(<span class="fn">len</span>(pivot.index)), pivot.index)
+plt.<span class="fn">title</span>(<span class="str">'GridSearchCV Heatmap'</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="cm"># ── 8. Save Model ─────────────────────────────────────</span>
+joblib.<span class="fn">dump</span>(best, <span class="str">'titanic_pipeline.pkl'</span>)
+<span class="fn">print</span>(<span class="str">"✅ Pipeline saved — load with joblib.load('titanic_pipeline.pkl')"</span>)</pre>
+  </div>
+  <h2>🎮 GridSearch Heatmap Explorer</h2>
+  <div class="demo-container">
+    <div class="demo-title">Explore how C and kernel interact in a 3×2 cross-validation grid</div>
+    <div class="demo-controls">
+      <button class="demo-btn primary" onclick="runGridSearch()">▶ Run GridSearchCV</button>
+      <button class="demo-btn" onclick="resetGrid()">↺ Reset</button>
+    </div>
+    <canvas id="gridCanvas" width="560" height="280"></canvas>
+    <div id="gridInfo" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--muted);margin-top:0.5rem"></div>
+  </div>
+</div></div></div>
 
 <footer>
   Machine Learning Visual Lab · Built for scikit-learn learners · Interactive & Animated
@@ -1992,6 +2707,537 @@ function drawForest() {
     ctx.fillText('Click "Grow Forest" to start voting', W/2, H/2);
   }
 }
+
+// ── VIZ 6: PCA spinning cloud ────────────────────────
+(function(){
+  const cv=document.getElementById('c6'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  const pts=Array.from({length:80},()=>{
+    const a=Math.random()*Math.PI*2, r=Math.random()*120;
+    return {x:r*Math.cos(a), y:r*Math.sin(a)*0.35+(Math.random()-0.5)*40, c:a<Math.PI?0:1};
+  });
+  let t=0;
+  function draw(){
+    t+=0.008; ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+    const cx=W/2, cy=H/2;
+    pts.forEach(p=>{
+      const rx=p.x*Math.cos(t)-p.y*0.3*Math.sin(t);
+      const ry=p.x*Math.sin(t)+p.y*0.3*Math.cos(t);
+      ctx.beginPath(); ctx.arc(cx+rx,cy+ry,4,0,Math.PI*2);
+      ctx.fillStyle=p.c?'rgba(255,45,155,0.8)':'rgba(0,229,255,0.6)'; ctx.fill();
+    });
+    // PC1 axis
+    const ax=Math.cos(t)*160, ay=Math.sin(t)*60;
+    ctx.beginPath(); ctx.moveTo(cx-ax,cy-ay); ctx.lineTo(cx+ax,cy+ay);
+    ctx.strokeStyle='#ff2d9b'; ctx.lineWidth=2.5;
+    ctx.shadowColor='#ff2d9b'; ctx.shadowBlur=10; ctx.stroke(); ctx.shadowBlur=0;
+    ctx.fillStyle='#ff2d9b'; ctx.font='bold 10px Space Mono'; ctx.textAlign='center';
+    ctx.fillText('PC1',cx+ax+14,cy+ay);
+    // PC2
+    const bx=-Math.sin(t)*80,by=Math.cos(t)*30;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+bx,cy+by);
+    ctx.strokeStyle='rgba(255,45,155,0.4)'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.fillText('PC2',cx+bx+14,cy+by);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── VIZ 7: KNN ripple ────────────────────────────────
+(function(){
+  const cv=document.getElementById('c7'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  const cls=[[100,120,0],[180,80,0],[130,200,0],[80,180,0],
+             [300,100,1],[360,150,1],[320,220,1],[400,80,1],
+             [220,300,2],[280,270,2],[260,330,2],[200,350,2]];
+  const colors=['#00cfff','#ff6b35','#a3ff47'];
+  let t=0, qx=220,qy=200;
+  function draw(){
+    t++;
+    ctx.clearRect(0,0,W,H); ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+    // Background cells (simplified Voronoi-like)
+    for(let gx=0;gx<W;gx+=18) for(let gy=0;gy<H;gy+=18){
+      let best=Infinity,bc=0;
+      cls.forEach(([px,py,c])=>{const d=(px-gx)**2+(py-gy)**2; if(d<best){best=d;bc=c;}});
+      ctx.fillStyle=colors[bc]+'15'; ctx.fillRect(gx,gy,18,18);
+    }
+    // Points
+    cls.forEach(([px,py,c])=>{
+      ctx.beginPath(); ctx.arc(px,py,7,0,Math.PI*2);
+      ctx.fillStyle=colors[c]; ctx.fill();
+      ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.stroke();
+    });
+    // Query point pulsing
+    const pulse=1+Math.sin(t*0.07)*0.3;
+    ctx.beginPath(); ctx.arc(qx,qy,9*pulse,0,Math.PI*2);
+    ctx.strokeStyle='#ffd600'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#ffd600'; ctx.beginPath(); ctx.arc(qx,qy,5,0,Math.PI*2); ctx.fill();
+    // k=3 lines
+    const dists=cls.map(([px,py,c],i)=>({d:(px-qx)**2+(py-qy)**2,i,c})).sort((a,b)=>a.d-b.d);
+    dists.slice(0,3).forEach(({i})=>{
+      const [px,py]=cls[i];
+      ctx.beginPath(); ctx.moveTo(qx,qy); ctx.lineTo(px,py);
+      ctx.strokeStyle='rgba(255,214,0,0.4)'; ctx.lineWidth=1.5; ctx.stroke();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── VIZ 8: Sigmoid animation ─────────────────────────
+(function(){
+  const cv=document.getElementById('c8'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  let t=0;
+  function sig(z){return 1/(1+Math.exp(-z));}
+  function draw(){
+    t+=0.03; ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+    // Grid
+    ctx.strokeStyle='#1a2540'; ctx.lineWidth=1;
+    [0.25,0.5,0.75].forEach(frac=>{
+      ctx.beginPath(); ctx.moveTo(0,H*frac); ctx.lineTo(W,H*frac); ctx.stroke();
+    });
+    // Sigmoid curve
+    ctx.beginPath();
+    for(let px=0;px<W;px++){
+      const z=(px/W-0.5)*12+Math.sin(t*0.2)*0.5;
+      const py=H-(sig(z)*(H-40)+20);
+      px===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle='#a3ff47'; ctx.lineWidth=2.5;
+    ctx.shadowColor='#a3ff47'; ctx.shadowBlur=12; ctx.stroke(); ctx.shadowBlur=0;
+    // Threshold line
+    const thresh=0.5+Math.sin(t*0.15)*0.1;
+    const ty=H-(thresh*(H-40)+20);
+    ctx.beginPath(); ctx.moveTo(0,ty); ctx.lineTo(W,ty);
+    ctx.strokeStyle='rgba(255,150,0,0.7)'; ctx.lineWidth=1.5;
+    ctx.setLineDash([6,4]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#ff9500'; ctx.font='bold 10px Space Mono';
+    ctx.fillText(`threshold=${thresh.toFixed(2)}`,8,ty-6);
+    // Data points
+    [[80,0.15],[160,0.22],[200,0.48],[270,0.62],[340,0.78],[390,0.85]].forEach(([px,py])=>{
+      const sy=H-(py*(H-40)+20);
+      ctx.beginPath(); ctx.arc(px,sy,5,0,Math.PI*2);
+      ctx.fillStyle=py>=thresh?'#a3ff47':'#ff6b35'; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── VIZ 9: Boosting bars ─────────────────────────────
+(function(){
+  const cv=document.getElementById('c9'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  let t=0;
+  const errors=[0.45,0.38,0.32,0.27,0.23,0.20,0.18,0.165,0.155,0.148,0.143,0.14];
+  function draw(){
+    t+=0.015; ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+    const barW=30, gap=6, startX=20;
+    const rounds=Math.min(errors.length, Math.floor(t*1.5)+1);
+    errors.slice(0,rounds).forEach((e,i)=>{
+      const barH=(H-60)*e;
+      const x=startX+i*(barW+gap);
+      const alpha=i===rounds-1?0.5+Math.sin(t*3)*0.3:0.85;
+      ctx.fillStyle=`rgba(255,149,0,${alpha})`;
+      ctx.fillRect(x,H-30-barH,barW,barH);
+      // residual sparks
+      if(i===rounds-1){
+        for(let s=0;s<3;s++){
+          const sx=x+barW/2+(Math.random()-0.5)*20;
+          const sy=H-30-barH-(Math.random()*15);
+          ctx.beginPath(); ctx.arc(sx,sy,2,0,Math.PI*2);
+          ctx.fillStyle='#ffd600'; ctx.fill();
+        }
+      }
+    });
+    // Trend line
+    if(rounds>1){
+      ctx.beginPath();
+      errors.slice(0,rounds).forEach((e,i)=>{
+        const x=startX+i*(barW+gap)+barW/2;
+        const y=H-30-(H-60)*e;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      });
+      ctx.strokeStyle='#ff2d9b'; ctx.lineWidth=2; ctx.stroke();
+    }
+    // Labels
+    ctx.fillStyle='#5a6a8a'; ctx.font='9px Space Mono'; ctx.textAlign='center';
+    errors.slice(0,rounds).forEach((e,i)=>{
+      ctx.fillText(e.toFixed(2),startX+i*(barW+gap)+barW/2,H-15);
+    });
+    ctx.fillStyle='#ff9500'; ctx.font='bold 11px Space Mono'; ctx.textAlign='left';
+    ctx.fillText(`Round ${rounds} / ${errors.length}  |  Error: ${errors[rounds-1].toFixed(3)}`,10,18);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── VIZ 10: Pipeline flow ────────────────────────────
+(function(){
+  const cv=document.getElementById('c10'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  const steps=[
+    {label:'Raw Data',color:'#5a6a8a',icon:'📄'},
+    {label:'Imputer',color:'#c084fc',icon:'🔧'},
+    {label:'Scaler',color:'#c084fc',icon:'⚖️'},
+    {label:'Selector',color:'#c084fc',icon:'✂️'},
+    {label:'Model',color:'#c084fc',icon:'🤖'},
+    {label:'Prediction',color:'#00ff88',icon:'✅'},
+  ];
+  let t=0;
+  function draw(){
+    t+=0.04; ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+    const boxW=60,boxH=60,gap=14;
+    const totalW=steps.length*(boxW+gap)-gap;
+    const startX=(W-totalW)/2, cy=H/2;
+    steps.forEach((s,i)=>{
+      const x=startX+i*(boxW+gap);
+      // Connector
+      if(i<steps.length-1){
+        const prog=Math.min(1,(Math.sin(t-i*0.5)+1)/2);
+        ctx.beginPath(); ctx.moveTo(x+boxW,cy); ctx.lineTo(x+boxW+gap*prog,cy);
+        ctx.strokeStyle='rgba(192,132,252,0.5)'; ctx.lineWidth=2; ctx.stroke();
+        // Particle
+        const px=x+boxW+gap*((t*0.5+i*0.3)%1);
+        ctx.beginPath(); ctx.arc(px,cy,3,0,Math.PI*2);
+        ctx.fillStyle='#c084fc'; ctx.fill();
+      }
+      // Box
+      const pulse=i===Math.floor(t*0.8)%steps.length?1.05:1;
+      ctx.save(); ctx.translate(x+boxW/2,cy); ctx.scale(pulse,pulse);
+      ctx.fillStyle=s.color+'22';
+      ctx.strokeStyle=s.color;
+      ctx.lineWidth=1.5;
+      const r=8;
+      ctx.beginPath();
+      ctx.roundRect(-boxW/2,-boxH/2,boxW,boxH,r);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle=s.color; ctx.font='bold 10px Space Mono';
+      ctx.textAlign='center'; ctx.fillText(s.label,0,boxH/2+14);
+      ctx.font='20px serif'; ctx.fillText(s.icon,0,7);
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ════ MODAL 6 DEMO: PCA ════
+let pcaCloud=null, pcaAnimRef=null;
+function makePCACloud(){
+  const noise=+document.getElementById('pcaNoise').value;
+  return Array.from({length:120},()=>{
+    const cls=Math.random()<0.5?0:1;
+    const ox=cls?80:-80, oy=cls?30:-30;
+    return {x:ox+(Math.random()-0.5)*noise*180,
+            y:oy+(Math.random()-0.5)*noise*80, cls};
+  });
+}
+function drawPCA(){
+  if(!pcaCloud) pcaCloud=makePCACloud();
+  const angle=+document.getElementById('pcaAngle').value*Math.PI/180;
+  document.getElementById('pcaAngleVal').textContent=document.getElementById('pcaAngle').value+'°';
+  document.getElementById('pcaNoiseVal').textContent=(+document.getElementById('pcaNoise').value).toFixed(2);
+  const cv=document.getElementById('pcaCanvas'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  const cx=W/2,cy=H/2;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+  // Project points onto PC1 axis
+  const pc1x=Math.cos(angle),pc1y=Math.sin(angle);
+  pcaCloud.forEach(p=>{
+    const proj=p.x*pc1x+p.y*pc1y;
+    // Original point
+    ctx.beginPath(); ctx.arc(cx+p.x,cy+p.y,4,0,Math.PI*2);
+    ctx.fillStyle=p.cls?'rgba(255,45,155,0.5)':'rgba(0,207,255,0.5)'; ctx.fill();
+    // Projection on PC1
+    const ppx=proj*pc1x, ppy=proj*pc1y;
+    ctx.beginPath(); ctx.moveTo(cx+p.x,cy+p.y); ctx.lineTo(cx+ppx,cy+ppy);
+    ctx.strokeStyle='rgba(255,214,0,0.1)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx+ppx,cy+ppy,3,0,Math.PI*2);
+    ctx.fillStyle=p.cls?'#ff2d9b':'#00cfff'; ctx.fill();
+  });
+  // PC1 axis
+  ctx.beginPath(); ctx.moveTo(cx-pc1x*190,cy-pc1y*190); ctx.lineTo(cx+pc1x*190,cy+pc1y*190);
+  ctx.strokeStyle='#ff2d9b'; ctx.lineWidth=2;
+  ctx.shadowColor='#ff2d9b'; ctx.shadowBlur=10; ctx.stroke(); ctx.shadowBlur=0;
+  ctx.fillStyle='#ff2d9b'; ctx.font='bold 11px Space Mono'; ctx.textAlign='center';
+  ctx.fillText('← PC1 →',cx+pc1x*200,cy+pc1y*200+12);
+  // Variance calc (simplified)
+  const projs=pcaCloud.map(p=>p.x*pc1x+p.y*pc1y);
+  const mean=projs.reduce((a,b)=>a+b,0)/projs.length;
+  const variance=projs.reduce((s,v)=>s+(v-mean)**2,0)/projs.length;
+  document.getElementById('pcaStats').innerHTML=
+    `angle: <b style="color:#ff2d9b">${document.getElementById('pcaAngle').value}°</b> &nbsp;|&nbsp;
+     captured variance: <b style="color:${variance>3000?'#00ff88':'#ffd600'}">${Math.round(variance)}</b> &nbsp;|&nbsp;
+     <span style="color:#5a6a8a">rotate to maximize → find PC1</span>`;
+}
+let pcaAutoRef=null;
+function animatePCA(){
+  if(pcaAutoRef){clearInterval(pcaAutoRef);pcaAutoRef=null;return;}
+  pcaAutoRef=setInterval(()=>{
+    const sl=document.getElementById('pcaAngle');
+    sl.value=(+sl.value+1)%360; drawPCA();
+  },30);
+}
+
+// ════ MODAL 7 DEMO: KNN ════
+let knnPts=[],knnQuery=null,knnClass=0;
+function knnClick(e){
+  const cv=document.getElementById('knnCanvas');
+  const rect=cv.getBoundingClientRect();
+  const x=e.clientX-rect.left, y=e.clientY-rect.top;
+  knnPts.push({x,y,c:knnClass});
+  knnQuery={x,y};
+  drawKNN();
+}
+function drawKNN(){
+  const cv=document.getElementById('knnCanvas'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  const k=+document.getElementById('knnKSlider').value;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+  const colors=['#00cfff','#ff6b35'];
+  if(knnPts.length===0){
+    ctx.fillStyle='#5a6a8a'; ctx.font='13px Space Mono'; ctx.textAlign='center';
+    ctx.fillText('Click to add Class A (blue) or Class B (orange) points',W/2,H/2);
+    return;
+  }
+  knnPts.forEach(p=>{
+    ctx.beginPath(); ctx.arc(p.x,p.y,7,0,Math.PI*2);
+    ctx.fillStyle=colors[p.c]; ctx.fill();
+    ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.stroke();
+  });
+  // Find query point = last added, classify it
+  if(knnPts.length>1){
+    const q=knnPts[knnPts.length-1];
+    const sorted=[...knnPts.slice(0,-1)].map(p=>({...p,d:(p.x-q.x)**2+(p.y-q.y)**2})).sort((a,b)=>a.d-b.d);
+    const neighbors=sorted.slice(0,Math.min(k,sorted.length));
+    neighbors.forEach(n=>{
+      ctx.beginPath(); ctx.moveTo(q.x,q.y); ctx.lineTo(n.x,n.y);
+      ctx.strokeStyle='rgba(255,214,0,0.4)'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(n.x,n.y,10,0,Math.PI*2);
+      ctx.strokeStyle='#ffd600'; ctx.lineWidth=1.5; ctx.stroke();
+    });
+    const votes=neighbors.reduce((acc,n)=>{acc[n.c]=(acc[n.c]||0)+1;return acc;},{});
+    const pred=+Object.entries(votes).sort((a,b)=>b[1]-a[1])[0][0];
+    // Draw query point classified
+    ctx.beginPath(); ctx.arc(q.x,q.y,9,0,Math.PI*2);
+    ctx.fillStyle=colors[pred]; ctx.fill();
+    ctx.strokeStyle='#ffd600'; ctx.lineWidth=2.5; ctx.stroke();
+    document.getElementById('knnInfo').innerHTML=
+      `Query classified as: <b style="color:${colors[pred]}">${pred===0?'Class A':'Class B'}</b> &nbsp;|&nbsp;
+       Votes: A=${votes[0]||0} B=${votes[1]||0} &nbsp;|&nbsp; k=${k}`;
+  }
+}
+
+// ════ MODAL 8 DEMO: Logistic ════
+let logData=null;
+function makeLogData(){
+  const n=80;
+  const xs=Array.from({length:n},()=>(Math.random()-0.5)*10);
+  return {xs, ys:xs.map(x=>+(Math.random()<1/(1+Math.exp(-(x*0.8+Math.random()*1.5-0.5)))))};
+}
+function sigmoid(z){return 1/(1+Math.exp(-z));}
+function drawLogistic(){
+  if(!logData)logData=makeLogData();
+  const thresh=+document.getElementById('threshSlider').value;
+  document.getElementById('threshVal').textContent=thresh.toFixed(2);
+  const cv=document.getElementById('logCanvas'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+  const px=x=>(x+5)/10*W, py=p=>H-p*(H-20)-10;
+  // Sigmoid curve
+  ctx.beginPath();
+  for(let i=0;i<=W;i++){const z=(i/W*10)-5; ctx.lineTo(i,py(sigmoid(z*0.8)));}
+  ctx.strokeStyle='#a3ff47'; ctx.lineWidth=2.5; ctx.shadowColor='#a3ff47'; ctx.shadowBlur=10; ctx.stroke(); ctx.shadowBlur=0;
+  // Threshold
+  ctx.beginPath(); ctx.moveTo(0,py(thresh)); ctx.lineTo(W,py(thresh));
+  ctx.strokeStyle='#ff9500'; ctx.lineWidth=1.5; ctx.setLineDash([6,4]); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle='#ff9500'; ctx.font='bold 10px Space Mono'; ctx.textAlign='left';
+  ctx.fillText(`threshold = ${thresh.toFixed(2)}`,4,py(thresh)-6);
+  // Background regions
+  ctx.fillStyle='rgba(163,255,71,0.06)'; ctx.fillRect(0,0,W,py(thresh));
+  ctx.fillStyle='rgba(255,107,53,0.06)'; ctx.fillRect(0,py(thresh),W,H-py(thresh));
+  // Data points
+  let tp=0,fp=0,tn=0,fn=0;
+  logData.xs.forEach((x,i)=>{
+    const prob=sigmoid(x*0.8);
+    const pred=prob>=thresh?1:0;
+    const actual=logData.ys[i];
+    if(actual===1&&pred===1)tp++;
+    else if(actual===0&&pred===0)tn++;
+    else if(actual===0&&pred===1)fp++;
+    else fn++;
+    ctx.beginPath(); ctx.arc(px(x),py(prob+((Math.random()-0.5)*0.05)),5,0,Math.PI*2);
+    ctx.fillStyle=pred===actual?'rgba(0,255,136,0.8)':'rgba(255,45,155,0.8)'; ctx.fill();
+  });
+  const prec=tp/(tp+fp)||0, rec=tp/(tp+fn)||0, f1=2*prec*rec/(prec+rec)||0;
+  document.getElementById('logStats').innerHTML=
+    `precision: <b style="color:#00ff88">${prec.toFixed(2)}</b> &nbsp;|&nbsp;
+     recall: <b style="color:#00cfff">${rec.toFixed(2)}</b> &nbsp;|&nbsp;
+     F1: <b style="color:${f1>0.7?'#00ff88':'#ffd600'}">${f1.toFixed(2)}</b> &nbsp;|&nbsp;
+     <span style="color:#5a6a8a">✓correct ✗wrong</span>`;
+}
+
+// ════ MODAL 9 DEMO: Gradient Boosting ════
+let boostRounds=0, boostAuto=null;
+const boostErrors=[0.45,0.41,0.37,0.34,0.31,0.29,0.27,0.255,0.242,0.231,0.222,0.215,0.209,0.204,0.200];
+function resetBoost(){
+  boostRounds=0;
+  document.getElementById('lrVal').textContent=(+document.getElementById('lrSlider').value).toFixed(2);
+  if(boostAuto){clearInterval(boostAuto);boostAuto=null;}
+  drawBoost();
+}
+function drawBoost(){
+  const lr=+document.getElementById('lrSlider').value;
+  const cv=document.getElementById('boostCanvas'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+  const n=Math.min(boostRounds,boostErrors.length);
+  // Effective errors modified by lr
+  const eff=boostErrors.map((e,i)=>Math.max(0.12,e*(1+(1-lr)*0.3)));
+  // Plot bars
+  const bw=Math.min(28,(W-40)/Math.max(n,1));
+  for(let i=0;i<n;i++){
+    const bh=(H-80)*eff[i];
+    const x=30+i*(bw+4);
+    const g=ctx.createLinearGradient(x,H-40-bh,x,H-40);
+    g.addColorStop(0,'#ff9500'); g.addColorStop(1,'rgba(255,149,0,0.3)');
+    ctx.fillStyle=g; ctx.fillRect(x,H-40-bh,bw,bh);
+    // Residual highlights on last bar
+    if(i===n-1){
+      ctx.strokeStyle='#ffd600'; ctx.lineWidth=2;
+      ctx.strokeRect(x,H-40-bh,bw,bh);
+    }
+  }
+  // Error curve
+  if(n>1){
+    ctx.beginPath();
+    for(let i=0;i<n;i++){
+      const x=30+i*(bw+4)+bw/2, y=H-40-(H-80)*eff[i];
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle='#ff2d9b'; ctx.lineWidth=2.5; ctx.stroke();
+  }
+  // Labels
+  ctx.fillStyle='#ff9500'; ctx.font='bold 11px Space Mono'; ctx.textAlign='left';
+  if(n>0) ctx.fillText(`Round ${n}  |  η=${lr.toFixed(2)}  |  error=${eff[n-1].toFixed(3)}`,10,18);
+  else ctx.fillText('Press "Run Boosting" to start',10,18);
+  ctx.fillStyle='#5a6a8a'; ctx.font='9px Space Mono'; ctx.textAlign='center';
+  if(n>0) ctx.fillText('← boosting rounds →',W/2,H-8);
+  document.getElementById('boostInfo').innerHTML= n>0
+    ?`<span>Trees used: <b style="color:#ff9500">${n}</b></span> &nbsp;|&nbsp;
+      <span>Error reduction: <b style="color:#00ff88">${((1-eff[n-1]/eff[0])*100).toFixed(1)}%</b></span> &nbsp;|&nbsp;
+      <span>Learning rate: <b style="color:#ffd600">${lr.toFixed(2)}</b></span>`
+    :'';
+}
+function autoBoost(){
+  if(boostAuto){clearInterval(boostAuto);boostAuto=null;return;}
+  boostAuto=setInterval(()=>{
+    boostRounds++;
+    drawBoost();
+    if(boostRounds>=boostErrors.length){clearInterval(boostAuto);boostAuto=null;}
+  },300);
+}
+
+// ════ MODAL 10 DEMO: GridSearchCV ════
+const gridCValues=[0.1,1,10];
+const gridKernels=['linear','rbf'];
+let gridScores=null, gridAnimRef=null;
+function resetGrid(){
+  gridScores=null;
+  const cv=document.getElementById('gridCanvas'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#5a6a8a'; ctx.font='13px Space Mono'; ctx.textAlign='center';
+  ctx.fillText('Click "Run GridSearchCV" to begin cross-validation search',W/2,H/2);
+  document.getElementById('gridInfo').textContent='';
+}
+function runGridSearch(){
+  if(gridAnimRef)return;
+  // Simulate realistic CV scores for C × kernel grid
+  const base={linear:{0.1:0.812,1:0.841,10:0.838},rbf:{0.1:0.795,1:0.873,10:0.869}};
+  gridScores={};
+  gridKernels.forEach(k=>gridCValues.forEach(c=>{
+    gridScores[`${k}_${c}`]=base[k][c]+(Math.random()-0.5)*0.015;
+  }));
+  let revealed=0;
+  const total=gridCValues.length*gridKernels.length;
+  gridAnimRef=setInterval(()=>{
+    revealed++;
+    drawGrid(revealed);
+    if(revealed>=total){clearInterval(gridAnimRef);gridAnimRef=null;}
+  },350);
+}
+function drawGrid(revealed){
+  const cv=document.getElementById('gridCanvas'); if(!cv)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#020408'; ctx.fillRect(0,0,W,H);
+  const cellW=140,cellH=80, startX=130, startY=60;
+  // Headers
+  ctx.fillStyle='#c084fc'; ctx.font='bold 11px Space Mono'; ctx.textAlign='center';
+  gridKernels.forEach((k,ki)=>ctx.fillText(k,startX+ki*cellW+cellW/2,42));
+  ctx.save(); ctx.textAlign='right';
+  gridCValues.forEach((c,ci)=>{
+    ctx.fillText(`C=${c}`,startX-10,startY+ci*cellH+cellH/2+4);
+  });
+  ctx.restore();
+  // Cells
+  let best=-1,bestKey='';
+  if(gridScores) Object.entries(gridScores).forEach(([k,v])=>{if(v>best){best=v;bestKey=k;}});
+  let idx=0;
+  gridCValues.forEach((c,ci)=>{
+    gridKernels.forEach((k,ki)=>{
+      idx++;
+      const key=`${k}_${c}`, score=gridScores?gridScores[key]:null;
+      const x=startX+ki*cellW, y=startY+ci*cellH;
+      if(score!==null && idx<=revealed){
+        const norm=(score-0.79)/(0.88-0.79);
+        const r=Math.round(192*norm), g=Math.round(132+100*(1-norm)), b=Math.round(252*(1-norm)+100*norm);
+        ctx.fillStyle=`rgba(${r},${g},${b},0.4)`;
+        ctx.fillRect(x,y,cellW-4,cellH-4);
+        ctx.strokeStyle=key===bestKey?'#ffd600':'rgba(192,132,252,0.3)';
+        ctx.lineWidth=key===bestKey?2.5:1;
+        ctx.strokeRect(x,y,cellW-4,cellH-4);
+        ctx.fillStyle='#fff'; ctx.font='bold 14px Space Mono'; ctx.textAlign='center';
+        ctx.fillText(score.toFixed(3),x+cellW/2-2,y+cellH/2+2);
+        ctx.fillStyle='#5a6a8a'; ctx.font='9px Space Mono';
+        ctx.fillText('AUC-ROC',x+cellW/2-2,y+cellH/2+16);
+        if(key===bestKey){
+          ctx.fillStyle='#ffd600'; ctx.font='bold 9px Space Mono';
+          ctx.fillText('★ BEST',x+cellW/2-2,y+14);
+        }
+      } else {
+        ctx.fillStyle='rgba(26,37,64,0.5)'; ctx.fillRect(x,y,cellW-4,cellH-4);
+        ctx.strokeStyle='#1a2540'; ctx.lineWidth=1; ctx.strokeRect(x,y,cellW-4,cellH-4);
+        ctx.fillStyle='#2a3550'; ctx.font='11px Space Mono'; ctx.textAlign='center';
+        ctx.fillText(idx<=revealed?'—':'...',x+cellW/2-2,y+cellH/2+4);
+      }
+    });
+  });
+  if(revealed>=(gridCValues.length*gridKernels.length)&&gridScores){
+    const [bk,bC]=bestKey.split('_');
+    document.getElementById('gridInfo').innerHTML=
+      `Best: <b style="color:#ffd600">kernel=${bk}, C=${bC}</b> &nbsp;|&nbsp;
+       CV AUC: <b style="color:#00ff88">${best.toFixed(4)}</b> &nbsp;|&nbsp;
+       <span style="color:#5a6a8a">Searched ${gridCValues.length*gridKernels.length} combos × 5 folds</span>`;
+  }
+}
+
+// Init modal hooks for new modals
+const origOpen=window.openModal;
+window.openModal=function(id){
+  origOpen(id);
+  if(id==='m6'){setTimeout(()=>{pcaCloud=null;drawPCA();},200);}
+  if(id==='m7'){setTimeout(()=>{knnPts=[];knnQuery=null;drawKNN();},200);}
+  if(id==='m8'){setTimeout(()=>{logData=null;drawLogistic();},200);}
+  if(id==='m9'){setTimeout(()=>{boostRounds=0;drawBoost();},200);}
+  if(id==='m10'){setTimeout(()=>{resetGrid();},200);}
+};
 </script>
 </body>
 </html>
